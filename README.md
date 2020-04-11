@@ -1,4 +1,6 @@
-# client
+# IloIlo Client application
+
+The application which is mostly user to connect to quizzes.
 
 ## Project setup
 ```

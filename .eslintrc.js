@@ -23,6 +23,11 @@ module.exports = {
       env: {
         jest: true,
       },
+      rules: {
+        'max-len': [0],
+        'vue/valid-v-model': "off",
+        "no-console": "off"
+      }
     },
   ],
 };
