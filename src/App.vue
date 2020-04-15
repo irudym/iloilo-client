@@ -20,6 +20,14 @@ export default {
   color: #2c3e50;
 }
 
+button {
+  font-family: Roboto;
+  font-size: 1rem;
+  border-radius: 6px;
+  outline: none;
+  cursor: pointer;
+}
+
 #nav {
   padding: 30px;
 

@@ -84,7 +84,7 @@ export default {
           this.loginUser({ email, auth_token, id });
           this.$router.push('/quizzes');
         } catch (error) {
-          this.errorMessage = error.detail;
+          this.errorMessage = error;
         }
       }
     },

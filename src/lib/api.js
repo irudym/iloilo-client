@@ -78,3 +78,35 @@ export const loadQuiz = async ({ url, pin, token }) => {
     throw constructError(error);
   }
 };
+
+export const evaluateQuiz = async ({
+  url, pin, token, quiz,
+}) => {
+  try {
+    const response = await axios.post(`${url}/evaluations/${pin}/quiz`, quiz, {
+      headers: {
+        Authorization: token,
+        'Content-Type': 'application/json',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw constructError(error);
+  }
+};
+
+export const evaluateQuestion = async ({
+  url, pin, token, quiz,
+}) => {
+  try {
+    const response = await axios.post(`${url}/evaluations/${pin}/quiz`, quiz, {
+      headers: {
+        Authorization: token,
+        'Content-Type': 'application/json',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw constructError(error);
+  }
+};

@@ -39,3 +39,47 @@ export const deSerializeQuiz = (quiz) => {
   };
   return response;
 };
+
+/**
+ * Encode the quiz object to API format
+ * @param {object} quiz Quiz with questions and answers
+ */
+export const serializeQuiz = (quiz) => ({
+  data: {
+    type: 'evaluation',
+    attributes: {
+      pin: quiz.pin,
+    },
+    relationships: {
+      questions: {
+        data: quiz.questions.map((question) => ({
+          type: 'question',
+          id: question.id,
+          relationships: {
+            answers: {
+              data: question.answers.map((answer) => ({
+                type: 'answer',
+                id: answer.id,
+                attributes: {
+                  correct: answer.correct,
+                },
+              })),
+            },
+          },
+        })),
+      },
+    },
+  },
+}
+);
+
+
+export const deSerializeQuestion = (question) => ({
+  id: question.data.id,
+  text: question.data.attributes.text,
+  answers: question.included.filter((element) => (element.type === 'answer'))
+    .map((answer) => ({
+      id: answer.id,
+      text: answer.attributes.text,
+    })),
+});

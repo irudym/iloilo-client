@@ -13,9 +13,6 @@
         <float-label label="E-mail" v-bind:error="errors.email" :value="email">
           <input name="email" type="text" autocomplete="off" v-model="email" />
         </float-label>
-         <float-label label="Группа" v-bind:error="errors.group" :value="group">
-          <input name="group" type="text" autocomplete="off" v-model="group" />
-        </float-label>
         <float-label label="Пароль" v-bind:error="errors.password" :value="password1">
           <input name="password" type="password" autocomplete="off" v-model="password1" />
         </float-label>
@@ -24,7 +21,10 @@
         </float-label>
         <p>
           Нажимая кнопку <b>Дальше</b> Вы соглашаетесь с тем, что ваши
-          персональные данные будет сохранены
+          персональные данные будет сохранены и
+          <router-link :to="'/license'" target="_blank">
+            даёте согласие на обработку своих Персональных данных
+          </router-link>
         </p>
         <start-button title="Дальше >" @click="submit" />
       </ilo-dialog>
@@ -57,7 +57,6 @@ export default {
     return {
       errors: {},
       email: '',
-      group: '',
       firstName: '',
       lastName: '',
       password1: '',

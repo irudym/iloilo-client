@@ -4,6 +4,7 @@ import Login from '../views/Login.vue';
 import Registration from '../views/Registration.vue';
 import Quizzes from '../views/Quizzes.vue';
 import Evaluation from '../views/Evaluation.vue';
+import Result from '../views/Result.vue';
 
 Vue.use(VueRouter);
 
@@ -35,12 +36,23 @@ const routes = [
     props: true,
   },
   {
+    path: '/result/:score',
+    name: 'Result',
+    component: Result,
+    props: true,
+  },
+  {
     path: '/about',
     name: 'About',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
+  },
+  {
+    path: '/license',
+    name: 'License',
+    component: () => import(/* webpackChunkName: "license" */ '../views/License.vue'),
   },
 ];
 

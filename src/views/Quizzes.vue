@@ -14,7 +14,7 @@
           <float-label label="PIN" v-bind:error="errors.pin" :value="pin">
             <input name="PIN" type="text" autocomplete="off" v-model="pin" />
           </float-label>
-          <start-button title="Подключится >" @click="start" />
+          <start-button title="Подключиться >" @click="start" />
         </div>
       </ilo-dialog>
     </big-blue-bar>
@@ -58,9 +58,15 @@ export default {
     IloDialog,
   },
   methods: {
-    ...mapActions(['setTimeInterval']),
+    ...mapActions(['setTimeInterval', 'clearQuiz']),
     async start() {
       this.errorMessage = null;
+      if (this.pin.trim() === '') {
+        const errors = {};
+        errors.pin = ['Необходимо ввести PIN теста'];
+        this.errors = errors;
+        return;
+      }
       // get quiz information
       try {
         const response = await getQuizInfo({
@@ -69,8 +75,16 @@ export default {
           pin: sanitizeString(this.pin),
         });
         console.log('QUIZZES[response]: ', response);
+        this.clearQuiz();
+
+        if (response.data.type === 'evaluation') {
+          this.$router.push(`/result/${response.data.attributes.score}`);
+        }
+
         this.connected = true;
         this.info = response.data.attributes;
+
+        this.clearQuiz();
         if (this.info.started) {
           this.$router.push(`/evaluation/${this.pin}`);
         }

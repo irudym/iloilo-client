@@ -3,6 +3,11 @@
     <app-header />
     <big-blue-bar>
       <ilo-dialog title="О проекте">
+        <ok-button
+          title="<< Назад"
+          :style="{'margin-bottom': '2rem'}"
+          @click="exit"
+        />
         <p>
           Используя данное приложение, Вы соглашаетесь с отказом от гарантий ниже:
         </p>
@@ -18,7 +23,7 @@
           ОБСЛУЖИВАНИЯ, ПОЧИНКИ ИЛИ ИСПРАВЛЕНИЯ.
         </p>
         <p>
-          Ilo Ilo (evaluate from Malay language) - приложение для удаленного создания
+          Ilo Ilo [<i>оценивать</i> на малазийском языке] - приложение для удаленного создания
           тестов и оценки знаний студентов.
         </p>
       </ilo-dialog>
@@ -30,6 +35,7 @@
 import AppHeader from '../components/AppHeader.vue';
 import IloDialog from '../components/Dialog.vue';
 import BigBlueBar from '../components/BigBlueBar.vue';
+import OkButton from '../components/OkButton.vue';
 
 export default {
   name: 'About',
@@ -37,6 +43,12 @@ export default {
     AppHeader,
     IloDialog,
     BigBlueBar,
+    OkButton,
+  },
+  methods: {
+    exit() {
+      this.$router.go(-1);
+    },
   },
 };
 </script>

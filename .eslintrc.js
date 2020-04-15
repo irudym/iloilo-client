@@ -24,7 +24,7 @@ module.exports = {
         jest: true,
       },
       rules: {
-        'max-len': [0],
+        'max-len': ["error", { "code": 180 }],
         'vue/valid-v-model': "off",
         "no-console": "off"
       }
