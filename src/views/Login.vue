@@ -78,10 +78,21 @@ export default {
             password: this.password,
           };
           const response = await login({ url: serverUrl, credentials });
-          // eslint-disable-next-line camelcase
-          const { email, auth_token, id } = response;
+          const {
+            email,
+            // eslint-disable-next-line camelcase
+            auth_token,
+            id,
+            // eslint-disable-next-line camelcase
+            user_name,
+          } = response;
           console.log('LOGIN: ', response);
-          this.loginUser({ email, auth_token, id });
+          this.loginUser({
+            email,
+            auth_token,
+            id,
+            user_name,
+          });
           this.$router.push('/quizzes');
         } catch (error) {
           this.errorMessage = error;

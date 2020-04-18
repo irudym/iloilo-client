@@ -11,7 +11,7 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: '/',
-    name: 'Quizzes',
+    name: 'Home',
     component: Quizzes,
   },
   {

@@ -2,14 +2,27 @@
   <div>
     <app-header />
     <div>
-      <ilo-dialog title="Тестирование" width="70%">
+      <div>
+        <radial-bar
+          :radius="80"
+          :progress="progress"
+          :value="progress"
+          :style="{margin: 'auto'}"
+          :maximum="duration"
+        />
+      </div>
+      <ilo-dialog title="Тестирование" width="70%" :style="{'top': '-9rem'}">
         <ok-button
           title="<< Вернуться к выбору теста"
           :style="{'margin-bottom': '2rem'}"
           @click="exit"
         />
-        <error-message v-show="errorMessage" v-bind:message="errorMessage" />
-        <div v-if="!showSubmit">
+        <error-message
+          v-show="errorMessage"
+          v-bind:message="errorMessage"
+          @close="closeError"
+        />
+        <div>
           <h4>Вопрос {{currentQuestionIndex+1}}</h4>
           <div class="notification" v-if="submitted">
             Вы уже ответили на этот вопрос
@@ -19,7 +32,11 @@
           </div>
           <div class="answers">
             <p v-for="answer in answers" :key="answer.text">
-              <checkbox :value="answer.correct" @input="changeAnswer(answer.id, $event)">
+              <checkbox
+                :value="answer.correct"
+                @input="changeAnswer(answer.id, $event)"
+                :disabled="submitted"
+              >
               {{answer.text}}
               </checkbox>
             </p>
@@ -27,22 +44,6 @@
           <div class="buttons">
             <start-button v-if="currentQuestionIndex!=0" title="< Назад" @click="back"/>
             <start-button title="Вперед >" @click="forward"/>
-          </div>
-        </div>
-        <div v-else>
-          <h4>
-            Вы ответили на {{questionAnswered}} из {{quiz.questions.length}}
-          </h4>
-          <div class="questions">
-            <p>
-              Если Вы уверены в своих ответах, то нажмите конопку <b>Отправьте ответы</b>.
-              Если у Вас есть сомнения, то можете еще раз просмотреть вопросы,
-              нажав кнопку <b>Назад</b>.
-            </p>
-          </div>
-          <div class="buttons">
-            <start-button title="< Назад" @click="back"/>
-            <start-button title="Отправить ответы" @click="submit" />
           </div>
         </div>
       </ilo-dialog>
@@ -58,6 +59,7 @@ import Checkbox from '../components/Checkbox.vue';
 import StartButton from '../components/StartButton.vue';
 import ErrorMessage from '../components/ErrorMessage.vue';
 import OkButton from '../components/OkButton.vue';
+import RadialBar from '../components/RadialBar.vue';
 import { serverUrl } from '../config/globals';
 import { loadQuiz, evaluateQuestion } from '../lib/api';
 import { deSerializeQuiz, serializeQuiz, deSerializeQuestion } from '../lib/serializer';
@@ -72,6 +74,7 @@ export default {
     ErrorMessage,
     IloDialog,
     OkButton,
+    RadialBar,
   },
   props: {
     pin: String,
@@ -81,6 +84,7 @@ export default {
       errors: {},
       errorMessage: null,
       // showSubmit: false,
+      progress: 0,
     };
   },
   async mounted() {
@@ -95,6 +99,23 @@ export default {
         const quiz = deSerializeQuiz(response);
         this.loadQuiz(quiz);
       }
+      this.progress = this.duration;
+      const currentTime = new Date();
+      const endTime = new Date(this.quiz.ended_at);
+      this.progress = Math.round((endTime - currentTime) / 60000);
+      console.log('Ended_at: ', this.quiz.ended_at);
+      console.log('Current time: ', currentTime);
+      console.log('endTime: ', endTime);
+
+      if (this.progress < 0) {
+        this.progress = 0;
+        this.errorMessage = {
+          title: 'Ошибка',
+          detail: 'Тест уже завершился, пожалуйста, проверте PIN код теста',
+        };
+        return;
+      }
+      setInterval(this.updateTime, 60000);
     } catch (error) {
       this.errorMessage = error;
       if (error.detail === 'Not enough or too many segments') {
@@ -105,8 +126,15 @@ export default {
   methods: {
     ...mapActions(['loadQuiz', 'clearQuiz', 'setAnswerValue', 'setCurrentQuestionIndex',
       'submitQuestion', 'addQuestion']),
+    updateTime() {
+      this.progress -= 1;
+      if (this.progress < 0) this.progress = this.duration;
+    },
     exit() {
       this.$router.push('/quizzes');
+    },
+    closeError() {
+      this.errorMessage = null;
     },
     back() {
       let index = this.currentQuestionIndex;
@@ -116,7 +144,18 @@ export default {
       }
       this.setCurrentQuestionIndex(index);
     },
+    validate() {
+      const answers = this.answers.filter((answer) => (answer.correct));
+      console.log('Answers: ', answers);
+      if (answers.length === 0) return false;
+      return true;
+    },
     async forward() {
+      this.errorMessage = null;
+      if (!this.validate()) {
+        this.errorMessage = { title: 'Ошибка', detail: 'Необходимо выбрать хотя бы один ответ' };
+        return;
+      }
       try {
         if (!this.quiz.questions[this.currentQuestionIndex].submitted) {
           const quiz = serializeQuiz(this.getQuiz);
@@ -144,34 +183,6 @@ export default {
       } catch (error) {
         this.errorMessage = error;
       }
-
-      /*
-      let index = this.currentQuestionIndex;
-      index += 1;
-      if (index >= this.quiz.questions.length) {
-        index = this.quiz.questions.length;
-      }
-      this.setCurrentQuestionIndex(index);
-      */
-    },
-    async submit() {
-      // this.clearQuiz();
-      /*
-      const quiz = serializeQuiz(this.getQuiz);
-      console.log('[Evaluation]: submit quiz= ', quiz);
-      try {
-        const response = await evaluateQuiz({
-          url: serverUrl,
-          token: this.getToken,
-          pin: this.pin,
-          quiz,
-        });
-        // console.log('RESPONSE: ', response);
-        this.$router.push(`/result/${response.data.attributes.score}`);
-      } catch (error) {
-        this.errorMessage = error;
-      }
-      */
     },
     changeAnswer(id, event) {
       this.setAnswerValue({
@@ -183,9 +194,6 @@ export default {
   computed: {
     ...mapGetters(['getToken', 'getQuiz', 'currentQuestionIndex']),
     ...mapState(['quiz', 'currentQuestionIndex']),
-    showSubmit() {
-      return (this.currentQuestionIndex >= this.quiz.questions.length);
-    },
     currentQuestion() {
       if (this.quiz.questions[this.currentQuestionIndex]) {
         return this.quiz.questions.length > 0 ? this.quiz.questions[this.currentQuestionIndex].text : '';
@@ -219,6 +227,14 @@ export default {
         two: 'вопроса',
         few: 'вопросов',
       })(answered)}`;
+    },
+    duration() {
+      console.log('DURATION: ', this.quiz.duration);
+
+      if (this.quiz) {
+        return this.quiz.duration;
+      }
+      return 0;
     },
   },
 };

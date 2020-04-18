@@ -2,7 +2,7 @@
 <template>
 <div class="input-container" :class="containerClasses">
   <div class="slot-container" ref="input-container">
-    <slot v-model="value" @focus="focus" @blur="blur" class="input"></slot>
+    <slot @focus="focus" @blur="blur" class="input"></slot>
   </div>
   <label class="label-placeholder" :for="labelName">{{label}}</label>
   <label
@@ -139,7 +139,7 @@ export default {
 
 .input-container {
   position: relative;
-  padding: 1rem 8px;
+  padding: 1rem 0;
   margin-bottom: 1rem;
 
   .error-message {
@@ -220,7 +220,7 @@ export default {
     left: 0;
     pointer-events: none;
     user-select: none;
-    padding-left: 1rem;
+    padding-left: 0.5rem;
 
     &.label-active {
       font-size: 1rem;

@@ -3,7 +3,7 @@
     <app-header />
     <big-blue-bar>
       <ilo-dialog title="Начать тестирование" width="60%">
-        <error-message v-show="errorMessage" v-bind:message="errorMessage" />
+        <error-message v-show="errorMessage" v-bind:message="errorMessage" @close="closeError"/>
         <div v-if="connected" class="info">
           <h4>{{info.title}}</h4>
           <div v-if="!info.started" class="description">
@@ -108,12 +108,21 @@ export default {
         this.errorMessage = error;
       }
     },
+    closeError() {
+      this.errorMessage = null;
+    },
   },
   computed: {
     ...mapGetters(['getToken', 'getTimeInterval']),
   },
   mounted() {
     // this.connected = false;
+    clearInterval(this.getTimeInterval);
+
+    // check if the token exist otherwise re-route to login
+    if (!this.getToken) {
+      this.$router.push('/login');
+    }
   },
   beforeDestroy() {
     clearInterval(this.getTimeInterval);

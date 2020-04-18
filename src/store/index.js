@@ -7,6 +7,7 @@ import * as types from './types';
 const COOKIE_EMAIL = 'iloilo-user-email';
 const COOKIE_AUTH_TOKEN = 'iolio-user-auth_token';
 const COOKIE_USER_ID = 'iloilo-user-user-id';
+const COOKIE_USER_NAME = 'iloilo-user-user-name';
 
 Vue.use(Vuex);
 
@@ -16,6 +17,7 @@ const initialState = {
     email: Cookies.get(COOKIE_EMAIL),
     auth_token: Cookies.get(COOKIE_AUTH_TOKEN),
     id: Cookies.get(COOKIE_USER_ID),
+    user_name: Cookies.get(COOKIE_USER_NAME),
   },
   quiz: localStorage.getItem('quiz') ? JSON.parse(localStorage.getItem('quiz')) : { questions: [] },
   currentQuestionIndex: 0,
@@ -35,6 +37,7 @@ export default new Vuex.Store({
       Cookies.set(COOKIE_AUTH_TOKEN, state.user.auth_token);
       Cookies.set(COOKIE_EMAIL, state.user.email);
       Cookies.set(COOKIE_USER_ID, state.user.id);
+      Cookies.set(COOKIE_USER_NAME, state.user.user_name);
     },
     [types.LOGOUT_USER](state) {
       state.user = {
@@ -53,7 +56,6 @@ export default new Vuex.Store({
     [types.CLEAR_QUIZ](state) {
       state.quiz = { questions: [] };
       localStorage.setItem('quiz', JSON.stringify(state.quiz));
-      console.log('LocalStorage: ', localStorage.getItem('quiz'));
       state.currentQuestionIndex = 0;
     },
     [types.SET_CURRENT_QUESTION_INDEX](state, payload) {
@@ -121,6 +123,7 @@ export default new Vuex.Store({
     isLogged: (state) => state.user.email && state.user.auth_token,
     getToken: (state) => state.user.auth_token,
     getUserId: (state) => state.user.id,
+    getUserName: (state) => state.user.user_name,
     getTimeInterval: (state) => state.timeIntervalId,
     getQuiz: (state) => state.quiz,
     currentQuestionIndex: (state) => state.currentQuestionIndex,

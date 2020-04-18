@@ -2,7 +2,7 @@
   <label class="container">
     {{text}}
     <slot />
-    <input type="checkbox" :checked="value" @input="update">
+    <input type="checkbox" :checked="value" @input="update" :disabled="disabled">
     <span class="checkmark"></span>
   </label>
 </template>
@@ -16,6 +16,12 @@ export default {
       type: String,
       default() {
         return null;
+      },
+    },
+    disabled: {
+      type: Boolean,
+      default() {
+        return false;
       },
     },
   },

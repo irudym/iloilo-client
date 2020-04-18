@@ -26,7 +26,8 @@ module.exports = {
       rules: {
         'max-len': ["error", { "code": 180 }],
         'vue/valid-v-model': "off",
-        "no-console": "off"
+        "no-console": "off",
+        "import/no-unresolved": "off"
       }
     },
   ],
