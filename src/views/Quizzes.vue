@@ -74,7 +74,7 @@ export default {
           token: this.getToken,
           pin: sanitizeString(this.pin),
         });
-        console.log('QUIZZES[response]: ', response);
+        console.log('Quizzes.vue=> QUIZZES[response]: ', response);
         this.clearQuiz();
 
         if (response.data.type === 'evaluation') {
@@ -92,6 +92,10 @@ export default {
         this.setTimeInterval(timeId);
       } catch (error) {
         this.errorMessage = error;
+        console.log('Quizzes.vue=> error', error);
+        if (error.detail === 'Signature verification raised') {
+          this.$router.push('/login');
+        }
       }
       // this.go('/evaluations/pin');
       // store questions and answers in Vuex
@@ -113,14 +117,14 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['getToken', 'getTimeInterval']),
+    ...mapGetters(['getToken', 'getTimeInterval', 'isLogged']),
   },
   mounted() {
     // this.connected = false;
     clearInterval(this.getTimeInterval);
 
-    // check if the token exist otherwise re-route to login
-    if (!this.getToken) {
+    // check if user logged in
+    if (!this.isLogged) {
       this.$router.push('/login');
     }
   },

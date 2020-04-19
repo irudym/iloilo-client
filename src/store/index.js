@@ -22,6 +22,7 @@ const initialState = {
   quiz: localStorage.getItem('quiz') ? JSON.parse(localStorage.getItem('quiz')) : { questions: [] },
   currentQuestionIndex: 0,
   timeIntervalId: null,
+  countdownId: null,
 };
 
 
@@ -49,14 +50,19 @@ export default new Vuex.Store({
     [types.SET_TIME_INTERVAL](state, payload) {
       state.timeIntervalId = payload.id;
     },
+    [types.SET_COUNTDOWN_ID](state, payload) {
+      state.countdownId = payload.id;
+    },
     [types.LOAD_QUIZ](state, payload) {
       state.quiz = { ...payload.quiz };
       localStorage.setItem('quiz', JSON.stringify(payload.quiz));
+      console.log('StoreIndex.js=> quiz loaded: ', state.quiz);
     },
     [types.CLEAR_QUIZ](state) {
       state.quiz = { questions: [] };
       localStorage.setItem('quiz', JSON.stringify(state.quiz));
       state.currentQuestionIndex = 0;
+      console.log('StoreIndex.js=> clear quiz, new state: ', state.quiz);
     },
     [types.SET_CURRENT_QUESTION_INDEX](state, payload) {
       state.currentQuestionIndex = payload.index;
@@ -118,15 +124,25 @@ export default new Vuex.Store({
     submitQuestion(context, question) {
       context.commit(types.SUBMIT_QUESTION, { question });
     },
+    setCountdownId(context, id) {
+      context.commit(types.SET_COUNTDOWN_ID, { id });
+    },
   },
   getters: {
-    isLogged: (state) => state.user.email && state.user.auth_token,
+    isLogged: (state) => {
+      // state.user.email && state.user.auth_token
+      if (!state.user.email || !state.user.auth_token) {
+        return false;
+      }
+      return true;
+    },
     getToken: (state) => state.user.auth_token,
     getUserId: (state) => state.user.id,
     getUserName: (state) => state.user.user_name,
     getTimeInterval: (state) => state.timeIntervalId,
     getQuiz: (state) => state.quiz,
     currentQuestionIndex: (state) => state.currentQuestionIndex,
+    countdownId: (state) => state.countdownId,
   },
   modules: {
   },

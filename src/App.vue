@@ -26,6 +26,7 @@ button {
   border-radius: 6px;
   outline: none;
   cursor: pointer;
+  border: none;
 }
 
 #nav {

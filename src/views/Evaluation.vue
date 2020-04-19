@@ -88,6 +88,15 @@ export default {
     };
   },
   async mounted() {
+    clearInterval(this.countdownId);
+    // console.log('Evaluation=> MOUNTED!');
+
+    // check if user logged in
+    if (!this.isLogged) {
+      // console.log('Evaluation=> User should login! isLogged: ', this.isLogged);
+      this.$router.push('/login');
+    }
+
     // load data from API server
     try {
       const response = await loadQuiz({ url: serverUrl, token: this.getToken, pin: this.pin });
@@ -95,17 +104,26 @@ export default {
         this.clearQuiz();
         this.$router.push('/');
       }
+      // console.log('Evaluation=> check if quiz should be loaded!');
+
+      let { quiz } = this;
+
       if (!this.getQuiz.pin || this.getQuiz.pin !== response.data.attributes.pin) {
-        const quiz = deSerializeQuiz(response);
+        quiz = deSerializeQuiz(response);
         this.loadQuiz(quiz);
+        // console.log('Evaluation=> deSerialized: ', quiz);
+        // console.log('Evaluation=> check quiz from state: ', this.quiz);
       }
+      // console.log('Evaluation=> Check if quiz was loaded, quiz from state: ', this.quiz);
+
       this.progress = this.duration;
       const currentTime = new Date();
-      const endTime = new Date(this.quiz.ended_at);
+      // console.log('Evaluation=> quiz: ', quiz);
+      const endTime = new Date(quiz.ended_at);
       this.progress = Math.round((endTime - currentTime) / 60000);
-      console.log('Ended_at: ', this.quiz.ended_at);
-      console.log('Current time: ', currentTime);
-      console.log('endTime: ', endTime);
+      // console.log('Evaluation=> Ended_at: ', quiz.ended_at);
+      // console.log('Evaluation=> Current time: ', currentTime);
+      // console.log('Evaluation=> endTime: ', endTime);
 
       if (this.progress < 0) {
         this.progress = 0;
@@ -115,9 +133,12 @@ export default {
         };
         return;
       }
-      setInterval(this.updateTime, 60000);
+      const timeId = setInterval(this.updateTime, 60000);
+      this.setCountdownId(timeId);
     } catch (error) {
       this.errorMessage = error;
+      // console.log('Evaluation=> error: ', error);
+
       if (error.detail === 'Not enough or too many segments') {
         this.$router.push('/login');
       }
@@ -125,7 +146,7 @@ export default {
   },
   methods: {
     ...mapActions(['loadQuiz', 'clearQuiz', 'setAnswerValue', 'setCurrentQuestionIndex',
-      'submitQuestion', 'addQuestion']),
+      'submitQuestion', 'addQuestion', 'setCountdownId']),
     updateTime() {
       this.progress -= 1;
       if (this.progress < 0) this.progress = this.duration;
@@ -146,7 +167,7 @@ export default {
     },
     validate() {
       const answers = this.answers.filter((answer) => (answer.correct));
-      console.log('Answers: ', answers);
+      // console.log('Answers: ', answers);
       if (answers.length === 0) return false;
       return true;
     },
@@ -165,11 +186,11 @@ export default {
             token: this.getToken,
             quiz,
           });
-          console.log('RESPONSE: ', response);
+          // console.log('Evaluation=> RESPONSE: ', response);
           if (response.data.type === 'question') {
             // add question to the quiz
             const question = deSerializeQuestion(response);
-            console.log('QUESTION: ', question);
+            // console.log('Evaluation=> QUESTION: ', question);
             this.addQuestion(question);
             this.submitQuestion(this.quiz.questions[this.currentQuestionIndex]);
           } else {
@@ -192,7 +213,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['getToken', 'getQuiz', 'currentQuestionIndex']),
+    ...mapGetters(['getToken', 'getQuiz', 'currentQuestionIndex', 'countdownId', 'isLogged']),
     ...mapState(['quiz', 'currentQuestionIndex']),
     currentQuestion() {
       if (this.quiz.questions[this.currentQuestionIndex]) {
@@ -229,13 +250,16 @@ export default {
       })(answered)}`;
     },
     duration() {
-      console.log('DURATION: ', this.quiz.duration);
+      console.log('Evaluation=> DURATION: ', this.quiz.duration);
 
       if (this.quiz) {
         return this.quiz.duration;
       }
       return 0;
     },
+  },
+  beforeDestroy() {
+    clearInterval(this.countdownId);
   },
 };
 </script>
