@@ -204,7 +204,7 @@ export default {
       }
     },
     changeAnswer(id, event) {
-      console.log('[Evaluation]=>answer event: ', event);
+      console.log('[Evaluation]=>answer[', id, '] event: ', event);
 
       this.setAnswerValue({
         answerId: id,
