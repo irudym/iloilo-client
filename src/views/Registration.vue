@@ -4,12 +4,18 @@
     <big-blue-bar>
       <ilo-dialog title="Регистрация" width="60%">
         <error-message v-show="errorMessage" v-bind:message="errorMessage" />
-        <float-label label="Имя" v-bind:error="errors.firstName" :value="firstName">
-          <input name="first name" type="text" autocomplete="off" v-model="firstName" />
-        </float-label>
-        <float-label label="Фамилия" v-bind:error="errors.lastName" :value="lastName">
-          <input name="last name" type="text" autocomplete="off" v-model="lastName" />
-        </float-label>
+        <div class="row">
+          <div class="col-sm-6">
+            <float-label label="Имя" v-bind:error="errors.firstName" :value="firstName">
+              <input name="first name" type="text" autocomplete="off" v-model="firstName" />
+            </float-label>
+          </div>
+          <div class="col-sm-6">
+            <float-label label="Фамилия" v-bind:error="errors.lastName" :value="lastName">
+              <input name="last name" type="text" autocomplete="off" v-model="lastName" />
+            </float-label>
+          </div>
+        </div>
         <float-label label="E-mail" v-bind:error="errors.email" :value="email">
           <input name="email" type="text" autocomplete="off" v-model="email" />
         </float-label>
@@ -42,6 +48,13 @@ import ErrorMessage from '../components/ErrorMessage.vue';
 import { signup } from '../lib/api';
 import { serverUrl } from '../config/globals';
 import BigBlueBar from '../components/BigBlueBar.vue';
+// import IloSelect from '../components/IloSelect.vue';
+
+/*
+        <float-label label="Группа (необязательно)" v-bind:error="errors.email" :value="email">
+          <ilo-select :options="[{id: 0, text: 'Canada'}, {id: 1, text: 'United States'}]" />
+        </float-label>
+*/
 
 export default {
   name: 'Registration',
@@ -52,6 +65,7 @@ export default {
     AppHeader,
     ErrorMessage,
     BigBlueBar,
+    // IloSelect,
   },
   data() {
     return {

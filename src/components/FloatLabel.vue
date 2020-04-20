@@ -156,7 +156,7 @@ export default {
     height: 100%;
 
     input {
-      height: 2.5rem;
+      height: 2.5rem!important;
       font-size: 1rem;
       padding: 0rem 0.5rem 0 0.5rem;
       border: 1px solid $form_border-colour;

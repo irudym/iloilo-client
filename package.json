@@ -15,6 +15,7 @@
     "js-cookie": "^2.2.1",
     "vue": "^2.6.11",
     "vue-router": "^3.1.5",
+    "vue-select": "^3.10.1",
     "vuex": "^3.1.2"
   },
   "devDependencies": {
