@@ -203,12 +203,12 @@ export default {
         this.errorMessage = error;
       }
     },
-    changeAnswer(id, event) {
-      console.log('[Evaluation]=>answer[', id, '] event: ', event);
+    changeAnswer(id, value) {
+      console.log('[Evaluation]=>answer[', id, '] event: ', value);
 
       this.setAnswerValue({
         answerId: id,
-        value: event,
+        value,
       });
     },
   },

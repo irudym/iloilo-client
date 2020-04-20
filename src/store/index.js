@@ -78,8 +78,12 @@ export default new Vuex.Store({
         }
         return answer;
       });
-      // update quiz on the local storage (to keep answers in case of reload or site crash)
-      localStorage.setItem('quiz', JSON.stringify(state.quiz));
+      try {
+        // update quiz on the local storage (to keep answers in case of reload or site crash)
+        localStorage.setItem('quiz', JSON.stringify(state.quiz));
+      } catch (error) {
+        console.log('LocalStorage Error: ', error);
+      }
     },
     [types.ADD_QUESTION](state, payload) {
       state.quiz.questions = [...state.quiz.questions, payload.question];
