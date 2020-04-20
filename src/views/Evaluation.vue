@@ -89,6 +89,7 @@ export default {
   },
   async mounted() {
     clearInterval(this.countdownId);
+    clearInterval(this.getTimeInterval);
     // console.log('Evaluation=> MOUNTED!');
 
     // check if user logged in
@@ -213,7 +214,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['getToken', 'getQuiz', 'currentQuestionIndex', 'countdownId', 'isLogged']),
+    ...mapGetters(['getToken', 'getQuiz', 'currentQuestionIndex', 'countdownId', 'isLogged', 'getTimeInterval']),
     ...mapState(['quiz', 'currentQuestionIndex']),
     currentQuestion() {
       if (this.quiz.questions[this.currentQuestionIndex]) {

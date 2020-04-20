@@ -45,7 +45,13 @@ export default new Vuex.Store({
         email: null,
         auth_token: null,
         id: null,
+        user_name: null,
       };
+      localStorage.clear();
+      Cookies.remove(COOKIE_AUTH_TOKEN);
+      Cookies.remove(COOKIE_EMAIL);
+      Cookies.remove(COOKIE_USER_ID);
+      Cookies.remove(COOKIE_USER_NAME);
     },
     [types.SET_TIME_INTERVAL](state, payload) {
       state.timeIntervalId = payload.id;

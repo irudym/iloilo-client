@@ -1,10 +1,12 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Login from '../views/Login.vue';
+import Logout from '../views/Logout.vue';
 import Registration from '../views/Registration.vue';
 import Quizzes from '../views/Quizzes.vue';
 import Evaluation from '../views/Evaluation.vue';
 import Result from '../views/Result.vue';
+import Profile from '../views/Profile.vue';
 
 Vue.use(VueRouter);
 
@@ -18,6 +20,11 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: Login,
+  },
+  {
+    path: '/logout',
+    name: 'Logout',
+    component: Logout,
   },
   {
     path: '/registration',
@@ -40,6 +47,11 @@ const routes = [
     name: 'Result',
     component: Result,
     props: true,
+  },
+  {
+    path: '/user/profile',
+    name: 'Profile',
+    component: Profile,
   },
   {
     path: '/about',

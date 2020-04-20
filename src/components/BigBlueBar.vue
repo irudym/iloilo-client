@@ -2,6 +2,7 @@
   <div class="blue-background mx-auto">
     <div v-show="greeting" class="greeting">
       {{greeting}}
+      <popup-menu :title="getUserName" :items='menuItems' />
     </div>
     <slot />
   </div>
@@ -9,14 +10,34 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import PopupMenu from './PopupMenu.vue';
 
 export default {
   name: 'BigBlueBar',
+  components: {
+    PopupMenu,
+  },
+  data() {
+    return {
+      menuItems: [
+        {
+          id: 100,
+          name: 'Редактировать',
+          link: '/user/profile',
+        },
+        {
+          id: 200,
+          name: 'Выйти',
+          link: '/logout',
+        },
+      ],
+    };
+  },
   computed: {
     ...mapGetters(['getUserName']),
     greeting() {
       if (this.getUserName !== undefined && this.getUserName !== null) {
-        return `Добрый день, ${this.getUserName}!`;
+        return 'Добрый день, ';
       }
       return null;
     },
