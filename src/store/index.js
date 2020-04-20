@@ -149,6 +149,7 @@ export default new Vuex.Store({
     getToken: (state) => state.user.auth_token,
     getUserId: (state) => state.user.id,
     getUserName: (state) => state.user.user_name,
+    getUserEmail: (state) => state.user.email,
     getTimeInterval: (state) => state.timeIntervalId,
     getQuiz: (state) => state.quiz,
     currentQuestionIndex: (state) => state.currentQuestionIndex,

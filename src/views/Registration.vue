@@ -123,7 +123,7 @@ export default {
           this.loginUser(response);
           this.$router.push('/quizzes');
         } catch (error) {
-          this.errorMessage = error.detail;
+          this.errorMessage = error;
         }
       }
     },

@@ -10,6 +10,7 @@ export const constructError = (error) => {
     };
   }
   return {
-    detail: error.message,
+    title: 'Error!',
+    detail: error.message ? error.message : error,
   };
 };
