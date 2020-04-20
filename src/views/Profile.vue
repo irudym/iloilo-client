@@ -9,7 +9,11 @@
           @click="exit"
         />
         <error-message v-show="errorMessage" v-bind:message="errorMessage" />
-        <info-message v-show="notificationMessage" :message="notificationMessage" />
+        <info-message
+          v-show="notificationMessage"
+          :message="notificationMessage"
+          @close="closeInfo"
+        />
         <div class="row">
           <div class="col-sm-6">
             <float-label label="Имя" v-bind:error="errors.firstName" :value="firstName">
@@ -112,6 +116,9 @@ export default {
     exit() {
       this.$router.go(-1);
     },
+    closeInfo() {
+      this.notificationMessage = null;
+    },
     validate() {
       const errors = {};
       if (!this.firstName.trim()) {
@@ -144,7 +151,7 @@ export default {
               attributes: {
                 first_name: this.firstName,
                 last_name: this.lastName,
-                password: this.password,
+                password: this.password1.trim() ? this.password1 : null,
               },
             },
           };
@@ -157,7 +164,9 @@ export default {
 
           console.log('[Profile]=> response: ', response);
 
-          // this.loginUser(response);
+          if (response.auth_token) {
+            this.loginUser(response);
+          }
 
           this.notificationMessage = {
             title: 'Успешно!',
