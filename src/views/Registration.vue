@@ -117,10 +117,10 @@ export default {
             password: this.password1,
           };
           const response = await signup({ url: serverUrl, user });
-          console.log('RESPONSE: ', response);
+          // console.log('RESPONSE: ', response);
           // eslint-disable-next-line camelcase
-          const { email, auth_token, id } = response;
-          this.loginUser({ email, auth_token, id });
+          // const { email, auth_token, id } = response;
+          this.loginUser(response);
           this.$router.push('/quizzes');
         } catch (error) {
           this.errorMessage = error.detail;

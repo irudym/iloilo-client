@@ -15,7 +15,7 @@ export default {
   computed: {
     ...mapGetters(['getUserName']),
     greeting() {
-      if (this.getUserName) {
+      if (this.getUserName !== undefined && this.getUserName !== null) {
         return `Добрый день, ${this.getUserName}!`;
       }
       return null;
