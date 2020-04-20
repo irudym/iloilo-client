@@ -137,8 +137,6 @@ export default {
       this.setCountdownId(timeId);
     } catch (error) {
       this.errorMessage = error;
-      // console.log('Evaluation=> error: ', error);
-
       if (error.detail === 'Not enough or too many segments') {
         this.$router.push('/login');
       }
@@ -206,6 +204,8 @@ export default {
       }
     },
     changeAnswer(id, event) {
+      console.log('[Evaluation]=>answer event: ', event);
+
       this.setAnswerValue({
         answerId: id,
         value: event,

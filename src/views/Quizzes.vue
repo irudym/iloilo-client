@@ -67,14 +67,16 @@ export default {
         this.errors = errors;
         return;
       }
+      const pin = sanitizeString(this.pin);
+      this.pin = pin;
       // get quiz information
       try {
         const response = await getQuizInfo({
           url: serverUrl,
           token: this.getToken,
-          pin: sanitizeString(this.pin),
+          pin,
         });
-        console.log('Quizzes.vue=> QUIZZES[response]: ', response);
+        // console.log('Quizzes.vue=> QUIZZES[response]: ', response);
         this.clearQuiz();
 
         if (response.data.type === 'evaluation') {
@@ -86,7 +88,7 @@ export default {
 
         this.clearQuiz();
         if (this.info.started) {
-          this.$router.push(`/evaluation/${this.pin}`);
+          this.$router.push(`/evaluation/${pin}`);
         }
         const timeId = setInterval(this.checkQuiz, 3000);
         this.setTimeInterval(timeId);
