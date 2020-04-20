@@ -1,9 +1,9 @@
 <template>
   <div class="popup-menu">
-    <div class="menu-title">
+    <div class="menu-title" @click="click" tabindex="0" @focusout="close">
       {{title}}
     </div>
-    <div class="menu-container">
+    <div class="menu-container" :style="menuStyle">
       <div class="menu-content">
           <router-link v-for="item in items" :key="item.id" v-bind:to="item.link">
               {{item.name}}
@@ -19,6 +19,25 @@ export default {
   props: {
     title: String,
     items: Array,
+  },
+  data() {
+    return {
+      showMenu: false,
+    };
+  },
+  methods: {
+    // trick to support phone devices without hover
+    click() {
+      this.showMenu = true;
+    },
+    close() {
+      this.showMenu = false;
+    },
+  },
+  computed: {
+    menuStyle() {
+      return this.showMenu ? { display: 'block' } : null;
+    },
   },
 };
 </script>
@@ -37,6 +56,7 @@ export default {
   color: white;
   border-bottom: 1px solid white;
   font-weight: 500;
+  outline: transparent;
 }
 
 .menu-container {
@@ -45,6 +65,7 @@ export default {
   position: absolute;
   z-index: 1000;
   top: 1rem;
+  user-select: none;
 }
 
 .menu-content {

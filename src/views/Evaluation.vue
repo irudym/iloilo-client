@@ -42,8 +42,8 @@
             </p>
           </div>
           <div class="buttons">
-            <start-button v-if="currentQuestionIndex!=0" title="< Назад" @click="back"/>
             <start-button title="Вперед >" @click="forward"/>
+            <start-button v-if="currentQuestionIndex!=0" title="< Назад" @click="back"/>
           </div>
         </div>
       </ilo-dialog>
@@ -284,7 +284,7 @@ h4 {
 
 .buttons {
   display: flex;
-  flex-direction: row;
+  flex-direction: row-reverse;
   justify-content: space-between;
 }
 
