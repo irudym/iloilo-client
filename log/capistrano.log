@@ -2288,3 +2288,185 @@ Entrypoints:
   INFO [993f883d] Running /usr/bin/env echo "Branch master (at 50f6a40e7eceb5611992b1bad368f5988ce21e6e) deployed as release 20200421134308 by irudym" >> /var/www/iloilo-client-test/revisions.log as iloilo@ilo-ilo.me
  DEBUG [993f883d] Command: cd /var/www/iloilo-client-test/releases && /usr/bin/env echo "Branch master (at 50f6a40e7eceb5611992b1bad368f5988ce21e6e) deployed as release 20200421134308 by irudym" >> /var/www/iloilo-client-test/revisions.log
   INFO [993f883d] Finished in 0.058 seconds with exit status 0 (successful).
+  INFO ---------------------------------------------------------------------------
+  INFO START 2020-04-21 17:27:52 +0300 cap production deploy
+  INFO ---------------------------------------------------------------------------
+  INFO [ca241e39] Running /usr/bin/env mkdir -p /tmp as iloilo@ilo-ilo.me
+ DEBUG [ca241e39] Command: /usr/bin/env mkdir -p /tmp
+  INFO [ca241e39] Finished in 0.403 seconds with exit status 0 (successful).
+ DEBUG Uploading /tmp/git-ssh-iloilo-client-production-irudym.sh 0.0%
+  INFO Uploading /tmp/git-ssh-iloilo-client-production-irudym.sh 100.0%
+  INFO [8e218401] Running /usr/bin/env chmod 700 /tmp/git-ssh-iloilo-client-production-irudym.sh as iloilo@ilo-ilo.me
+ DEBUG [8e218401] Command: /usr/bin/env chmod 700 /tmp/git-ssh-iloilo-client-production-irudym.sh
+  INFO [8e218401] Finished in 0.083 seconds with exit status 0 (successful).
+  INFO [6da78884] Running /usr/bin/env git ls-remote git@github.com:irudym/iloilo-client HEAD as iloilo@ilo-ilo.me
+ DEBUG [6da78884] Command: ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-iloilo-client-production-irudym.sh" ; /usr/bin/env git ls-remote git@github.com:irudym/iloilo-client HEAD )
+ DEBUG [6da78884] 	45775af792962b8dce4e8eca3bcac9266a40eea0	HEAD
+  INFO [6da78884] Finished in 2.007 seconds with exit status 0 (successful).
+  INFO [88c67d1a] Running /usr/bin/env mkdir -p /var/www/iloilo-client-test/shared /var/www/iloilo-client-test/releases as iloilo@ilo-ilo.me
+ DEBUG [88c67d1a] Command: /usr/bin/env mkdir -p /var/www/iloilo-client-test/shared /var/www/iloilo-client-test/releases
+  INFO [88c67d1a] Finished in 0.016 seconds with exit status 0 (successful).
+  INFO [1864305f] Running /usr/bin/env mkdir -p /var/www/iloilo-client-test/shared/node_modules as iloilo@ilo-ilo.me
+ DEBUG [1864305f] Command: /usr/bin/env mkdir -p /var/www/iloilo-client-test/shared/node_modules
+  INFO [1864305f] Finished in 0.062 seconds with exit status 0 (successful).
+ DEBUG [49de83ea] Running [ -f /var/www/iloilo-client-test/current/REVISION ] as iloilo@ilo-ilo.me
+ DEBUG [49de83ea] Command: [ -f /var/www/iloilo-client-test/current/REVISION ]
+ DEBUG [49de83ea] Finished in 0.065 seconds with exit status 0 (successful).
+ DEBUG [d1bb4fb1] Running /usr/bin/env cat /var/www/iloilo-client-test/current/REVISION 2>/dev/null as iloilo@ilo-ilo.me
+ DEBUG [d1bb4fb1] Command: /usr/bin/env cat /var/www/iloilo-client-test/current/REVISION 2>/dev/null
+ DEBUG [d1bb4fb1] 	50f6a40e7eceb5611992b1bad368f5988ce21e6e
+ DEBUG [d1bb4fb1] Finished in 0.074 seconds with exit status 0 (successful).
+ DEBUG [e86e0562] Running [ -f /var/www/iloilo-client-test/repo/HEAD ] as iloilo@ilo-ilo.me
+ DEBUG [e86e0562] Command: [ -f /var/www/iloilo-client-test/repo/HEAD ]
+ DEBUG [e86e0562] Finished in 0.056 seconds with exit status 0 (successful).
+  INFO The repository mirror is at /var/www/iloilo-client-test/repo
+ DEBUG [e0c8e274] Running if test ! -d /var/www/iloilo-client-test/repo; then echo "Directory does not exist '/var/www/iloilo-client-test/repo'" 1>&2; false; fi as iloilo@ilo-ilo.me
+ DEBUG [e0c8e274] Command: if test ! -d /var/www/iloilo-client-test/repo; then echo "Directory does not exist '/var/www/iloilo-client-test/repo'" 1>&2; false; fi
+ DEBUG [e0c8e274] Finished in 0.057 seconds with exit status 0 (successful).
+  INFO [70621fcc] Running /usr/bin/env git remote set-url origin git@github.com:irudym/iloilo-client as iloilo@ilo-ilo.me
+ DEBUG [70621fcc] Command: cd /var/www/iloilo-client-test/repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-iloilo-client-production-irudym.sh" ; /usr/bin/env git remote set-url origin git@github.com:irudym/iloilo-client )
+  INFO [70621fcc] Finished in 0.065 seconds with exit status 0 (successful).
+  INFO [d90510e7] Running /usr/bin/env git remote update --prune as iloilo@ilo-ilo.me
+ DEBUG [d90510e7] Command: cd /var/www/iloilo-client-test/repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-iloilo-client-production-irudym.sh" ; /usr/bin/env git remote update --prune )
+ DEBUG [d90510e7] 	Fetching origin
+ DEBUG [d90510e7] 	From github.com:irudym/iloilo-client
+   50f6a40..45775af  master     -> master
+  INFO [d90510e7] Finished in 1.744 seconds with exit status 0 (successful).
+ DEBUG [7816d8ea] Running if test ! -d /var/www/iloilo-client-test/repo; then echo "Directory does not exist '/var/www/iloilo-client-test/repo'" 1>&2; false; fi as iloilo@ilo-ilo.me
+ DEBUG [7816d8ea] Command: if test ! -d /var/www/iloilo-client-test/repo; then echo "Directory does not exist '/var/www/iloilo-client-test/repo'" 1>&2; false; fi
+ DEBUG [7816d8ea] Finished in 0.015 seconds with exit status 0 (successful).
+  INFO [73368a35] Running /usr/bin/env mkdir -p /var/www/iloilo-client-test/releases/20200421142755 as iloilo@ilo-ilo.me
+ DEBUG [73368a35] Command: cd /var/www/iloilo-client-test/repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-iloilo-client-production-irudym.sh" ; /usr/bin/env mkdir -p /var/www/iloilo-client-test/releases/20200421142755 )
+  INFO [73368a35] Finished in 0.064 seconds with exit status 0 (successful).
+  INFO [2d5d6d16] Running /usr/bin/env git archive master | /usr/bin/env tar -x -f - -C /var/www/iloilo-client-test/releases/20200421142755 as iloilo@ilo-ilo.me
+ DEBUG [2d5d6d16] Command: cd /var/www/iloilo-client-test/repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-iloilo-client-production-irudym.sh" ; /usr/bin/env git archive master | /usr/bin/env tar -x -f - -C /var/www/iloilo-client-test/releases/20200421142755 )
+  INFO [2d5d6d16] Finished in 0.085 seconds with exit status 0 (successful).
+ DEBUG [d3c0b723] Running if test ! -d /var/www/iloilo-client-test/repo; then echo "Directory does not exist '/var/www/iloilo-client-test/repo'" 1>&2; false; fi as iloilo@ilo-ilo.me
+ DEBUG [d3c0b723] Command: if test ! -d /var/www/iloilo-client-test/repo; then echo "Directory does not exist '/var/www/iloilo-client-test/repo'" 1>&2; false; fi
+ DEBUG [d3c0b723] Finished in 0.055 seconds with exit status 0 (successful).
+ DEBUG [13f1b0d8] Running /usr/bin/env git rev-list --max-count=1 master as iloilo@ilo-ilo.me
+ DEBUG [13f1b0d8] Command: cd /var/www/iloilo-client-test/repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-iloilo-client-production-irudym.sh" ; /usr/bin/env git rev-list --max-count=1 master )
+ DEBUG [13f1b0d8] 	45775af792962b8dce4e8eca3bcac9266a40eea0
+ DEBUG [13f1b0d8] Finished in 0.063 seconds with exit status 0 (successful).
+ DEBUG [c0882939] Running if test ! -d /var/www/iloilo-client-test/releases/20200421142755; then echo "Directory does not exist '/var/www/iloilo-client-test/releases/20200421142755'" 1>&2; false; fi as iloilo@ilo-ilo.me
+ DEBUG [c0882939] Command: if test ! -d /var/www/iloilo-client-test/releases/20200421142755; then echo "Directory does not exist '/var/www/iloilo-client-test/releases/20200421142755'" 1>&2; false; fi
+ DEBUG [c0882939] Finished in 0.058 seconds with exit status 0 (successful).
+  INFO [0b4a23d7] Running /usr/bin/env echo "45775af792962b8dce4e8eca3bcac9266a40eea0" > REVISION as iloilo@ilo-ilo.me
+ DEBUG [0b4a23d7] Command: cd /var/www/iloilo-client-test/releases/20200421142755 && /usr/bin/env echo "45775af792962b8dce4e8eca3bcac9266a40eea0" > REVISION
+  INFO [0b4a23d7] Finished in 0.067 seconds with exit status 0 (successful).
+  INFO [7d0d6bad] Running /usr/bin/env mkdir -p /var/www/iloilo-client-test/releases/20200421142755 as iloilo@ilo-ilo.me
+ DEBUG [7d0d6bad] Command: /usr/bin/env mkdir -p /var/www/iloilo-client-test/releases/20200421142755
+  INFO [7d0d6bad] Finished in 0.061 seconds with exit status 0 (successful).
+ DEBUG [d11059d9] Running [ -L /var/www/iloilo-client-test/releases/20200421142755/node_modules ] as iloilo@ilo-ilo.me
+ DEBUG [d11059d9] Command: [ -L /var/www/iloilo-client-test/releases/20200421142755/node_modules ]
+ DEBUG [d11059d9] Finished in 0.055 seconds with exit status 1 (failed).
+ DEBUG [02c81caf] Running [ -d /var/www/iloilo-client-test/releases/20200421142755/node_modules ] as iloilo@ilo-ilo.me
+ DEBUG [02c81caf] Command: [ -d /var/www/iloilo-client-test/releases/20200421142755/node_modules ]
+ DEBUG [02c81caf] Finished in 0.057 seconds with exit status 1 (failed).
+  INFO [d2472fa5] Running /usr/bin/env ln -s /var/www/iloilo-client-test/shared/node_modules /var/www/iloilo-client-test/releases/20200421142755/node_modules as iloilo@ilo-ilo.me
+ DEBUG [d2472fa5] Command: /usr/bin/env ln -s /var/www/iloilo-client-test/shared/node_modules /var/www/iloilo-client-test/releases/20200421142755/node_modules
+  INFO [d2472fa5] Finished in 0.061 seconds with exit status 0 (successful).
+  INFO [ded7e61c] Running /usr/bin/env ln -s /var/www/iloilo-client-test/releases/20200421142755 /var/www/iloilo-client-test/releases/current as iloilo@ilo-ilo.me
+ DEBUG [ded7e61c] Command: /usr/bin/env ln -s /var/www/iloilo-client-test/releases/20200421142755 /var/www/iloilo-client-test/releases/current
+  INFO [ded7e61c] Finished in 0.059 seconds with exit status 0 (successful).
+  INFO [bf4fd5ee] Running /usr/bin/env mv /var/www/iloilo-client-test/releases/current /var/www/iloilo-client-test as iloilo@ilo-ilo.me
+ DEBUG [bf4fd5ee] Command: /usr/bin/env mv /var/www/iloilo-client-test/releases/current /var/www/iloilo-client-test
+  INFO [bf4fd5ee] Finished in 0.070 seconds with exit status 0 (successful).
+ DEBUG [f1a8fbf1] Running if test ! -d /var/www/iloilo-client-test/releases/20200421142755; then echo "Directory does not exist '/var/www/iloilo-client-test/releases/20200421142755'" 1>&2; false; fi as iloilo@ilo-ilo.me
+ DEBUG [f1a8fbf1] Command: if test ! -d /var/www/iloilo-client-test/releases/20200421142755; then echo "Directory does not exist '/var/www/iloilo-client-test/releases/20200421142755'" 1>&2; false; fi
+ DEBUG [f1a8fbf1] Finished in 0.096 seconds with exit status 0 (successful).
+  INFO [6a3cd75d] Running /usr/bin/env npm install as iloilo@ilo-ilo.me
+ DEBUG [6a3cd75d] Command: cd /var/www/iloilo-client-test/releases/20200421142755 && /usr/bin/env npm install
+ DEBUG [6a3cd75d] 	npm
+ DEBUG [6a3cd75d] 	 
+ DEBUG [6a3cd75d] 	WARN optional
+ DEBUG [6a3cd75d] 	 Skipping failed optional dependency /chokidar/fsevents:
+ DEBUG [6a3cd75d] 	npm
+ DEBUG [6a3cd75d] 	 
+ DEBUG [6a3cd75d] 	WARN notsup Not compatible with your operating system or architecture: fsevents@1.2.12
+ DEBUG [6a3cd75d] 	npm
+ DEBUG [6a3cd75d] 	 
+ DEBUG [6a3cd75d] 	WARN optional Skipping failed optional dependency /jest-haste-map/fsevents:
+ DEBUG [6a3cd75d] 	npm
+ DEBUG [6a3cd75d] 	 
+ DEBUG [6a3cd75d] 	WARN
+ DEBUG [6a3cd75d] 	 
+ DEBUG [6a3cd75d] 	notsup
+ DEBUG [6a3cd75d] 	 Not compatible with your operating system or architecture: fsevents@1.2.12
+ DEBUG [6a3cd75d] 	npm
+ DEBUG [6a3cd75d] 	 
+ DEBUG [6a3cd75d] 	WARN
+ DEBUG [6a3cd75d] 	 jsdom@15.2.1 requires a peer of canvas@^2.5.0 but none was installed.
+ DEBUG [6a3cd75d] 	npm
+ DEBUG [6a3cd75d] 	 
+ DEBUG [6a3cd75d] 	WARN
+ DEBUG [6a3cd75d] 	 ws@7.2.3 requires a peer of bufferutil@^4.0.1 but none was installed.
+ DEBUG [6a3cd75d] 	npm
+ DEBUG [6a3cd75d] 	 
+ DEBUG [6a3cd75d] 	WARN
+ DEBUG [6a3cd75d] 	 ws@7.2.3 requires a peer of utf-8-validate@^5.0.2 but none was installed.
+ DEBUG [6a3cd75d] 	npm
+ DEBUG [6a3cd75d] 	 
+ DEBUG [6a3cd75d] 	WARN
+ DEBUG [6a3cd75d] 	 sass-loader@8.0.2 requires a peer of fibers@>= 3.1.0 but none was installed.
+ DEBUG [6a3cd75d] 	npm
+ DEBUG [6a3cd75d] 	 WARN
+ DEBUG [6a3cd75d] 	 sass-loader@8.0.2 requires a peer of node-sass@^4.0.0 but none was installed.
+  INFO [6a3cd75d] Finished in 15.918 seconds with exit status 0 (successful).
+ DEBUG [b62895fa] Running if test ! -d /var/www/iloilo-client-test/releases/20200421142755; then echo "Directory does not exist '/var/www/iloilo-client-test/releases/20200421142755'" 1>&2; false; fi as iloilo@ilo-ilo.me
+ DEBUG [b62895fa] Command: if test ! -d /var/www/iloilo-client-test/releases/20200421142755; then echo "Directory does not exist '/var/www/iloilo-client-test/releases/20200421142755'" 1>&2; false; fi
+ DEBUG [b62895fa] Finished in 0.077 seconds with exit status 0 (successful).
+  INFO [5dfb151a] Running /usr/bin/env npm run build as iloilo@ilo-ilo.me
+ DEBUG [5dfb151a] Command: cd /var/www/iloilo-client-test/releases/20200421142755 && /usr/bin/env npm run build
+ DEBUG [5dfb151a] 	
+> iloilo@0.1.0 build /var/www/iloilo-client-test/releases/20200421142755
+> vue-cli-service build
+
+ DEBUG [5dfb151a] 	
+ DEBUG [5dfb151a] 	-  Building for production...
+ DEBUG [5dfb151a] 	 WARNING  Compiled with 2 warnings2:28:21 PM
+ DEBUG [5dfb151a] 	
+ DEBUG [5dfb151a] 	 warning  
+ DEBUG [5dfb151a] 	
+asset size limit: The following asset(s) exceed the recommended size limit (244 KiB).
+This can impact web performance.
+Assets: 
+  iloilo_files/app.js (1.03 MiB)
+  iloilo_files/chunk-vendors.js (2.49 MiB)
+
+ warning  
+
+entrypoint size limit: The following entrypoint(s) combined asset size exceeds the recommended limit (244 KiB). This can impact web performance.
+Entrypoints:
+  app (281 KiB)
+      js/chunk-vendors.40eb835d.js
+      css/app.eea6c7cb.css
+      js/app.0d8b4ce9.js
+
+ DEBUG [5dfb151a] 	
+ DEBUG [5dfb151a] 	  File                                  Size               Gzipped
+
+  dist/iloilo_files/chunk-vendors.js    2550.85 KiB        641.55 KiB
+  dist/iloilo_files/app.js              1052.17 KiB        110.90 KiB
+  dist/js/chunk-vendors.40eb835d.js     173.05 KiB         60.17 KiB
+  dist/js/app.0d8b4ce9.js               44.63 KiB          10.72 KiB
+  dist/js/license.5a6586ce.js           2.45 KiB           1.18 KiB
+  dist/js/about.328e52b6.js             2.19 KiB           1.21 KiB
+  dist/css/app.eea6c7cb.css             62.94 KiB          8.19 KiB
+
+  Images and other types of assets omitted.
+
+ DEBUG [5dfb151a] 	 DONE  Build complete. The dist directory is ready to be deployed.
+ DEBUG [5dfb151a] 	 INFO  Check out deployment instructions at https://cli.vuejs.org/guide/deployment.html
+      
+  INFO [5dfb151a] Finished in 10.849 seconds with exit status 0 (successful).
+ DEBUG [d520502f] Running /usr/bin/env ls -x /var/www/iloilo-client-test/releases as iloilo@ilo-ilo.me
+ DEBUG [d520502f] Command: /usr/bin/env ls -x /var/www/iloilo-client-test/releases
+ DEBUG [d520502f] 	20200421133726	20200421134308	20200421142755
+ DEBUG [d520502f] Finished in 0.106 seconds with exit status 0 (successful).
+ DEBUG [318f737d] Running if test ! -d /var/www/iloilo-client-test/releases; then echo "Directory does not exist '/var/www/iloilo-client-test/releases'" 1>&2; false; fi as iloilo@ilo-ilo.me
+ DEBUG [318f737d] Command: if test ! -d /var/www/iloilo-client-test/releases; then echo "Directory does not exist '/var/www/iloilo-client-test/releases'" 1>&2; false; fi
+ DEBUG [318f737d] Finished in 0.103 seconds with exit status 0 (successful).
+  INFO [1d4f8148] Running /usr/bin/env echo "Branch master (at 45775af792962b8dce4e8eca3bcac9266a40eea0) deployed as release 20200421142755 by irudym" >> /var/www/iloilo-client-test/revisions.log as iloilo@ilo-ilo.me
+ DEBUG [1d4f8148] Command: cd /var/www/iloilo-client-test/releases && /usr/bin/env echo "Branch master (at 45775af792962b8dce4e8eca3bcac9266a40eea0) deployed as release 20200421142755 by irudym" >> /var/www/iloilo-client-test/revisions.log
+  INFO [1d4f8148] Finished in 0.117 seconds with exit status 0 (successful).
