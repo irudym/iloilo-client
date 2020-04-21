@@ -88,8 +88,8 @@ export default {
   }
 }
 
-.popup-menu:hover .menu-container {
-  display: block;
-}
+// .popup-menu:hover .menu-container {
+//  display: block;
+// }
 
 </style>

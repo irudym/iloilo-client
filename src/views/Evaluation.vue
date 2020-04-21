@@ -90,11 +90,9 @@ export default {
   async mounted() {
     clearInterval(this.countdownId);
     clearInterval(this.getTimeInterval);
-    // console.log('Evaluation=> MOUNTED!');
 
     // check if user logged in
     if (!this.isLogged) {
-      // console.log('Evaluation=> User should login! isLogged: ', this.isLogged);
       this.$router.push('/login');
     }
 
@@ -105,26 +103,19 @@ export default {
         this.clearQuiz();
         this.$router.push('/');
       }
-      // console.log('Evaluation=> check if quiz should be loaded!');
 
       let { quiz } = this;
 
       if (!this.getQuiz.pin || this.getQuiz.pin !== response.data.attributes.pin) {
         quiz = deSerializeQuiz(response);
         this.loadQuiz(quiz);
-        // console.log('Evaluation=> deSerialized: ', quiz);
-        // console.log('Evaluation=> check quiz from state: ', this.quiz);
       }
-      // console.log('Evaluation=> Check if quiz was loaded, quiz from state: ', this.quiz);
 
       this.progress = this.duration;
       const currentTime = new Date();
       // console.log('Evaluation=> quiz: ', quiz);
       const endTime = new Date(quiz.ended_at);
       this.progress = Math.round((endTime - currentTime) / 60000);
-      // console.log('Evaluation=> Ended_at: ', quiz.ended_at);
-      // console.log('Evaluation=> Current time: ', currentTime);
-      // console.log('Evaluation=> endTime: ', endTime);
 
       if (this.progress < 0) {
         this.progress = 0;
@@ -205,8 +196,6 @@ export default {
       }
     },
     changeAnswer(id, value) {
-      console.log('[Evaluation]=>answer[', id, '] event: ', value);
-
       this.setAnswerValue({
         answerId: id,
         value,

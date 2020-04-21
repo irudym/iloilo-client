@@ -86,6 +86,7 @@ export default {
   text-align: center;
   position: relative;
   user-select: none;
+  font-variant-numeric: tabular-nums;
 }
 
 .progress {
