@@ -46,22 +46,6 @@ namespace :deploy do
     end
   end
 
-  task :npm_install do
-    on roles(:app), in: :sequence, wait: 5 do
-      within release_path do
-        execute :npm, "install"
-      end
-    end
-  end
-
-  task :build do
-    on roles(:app), in: :sequence, wait: 5 do
-      within release_path do
-        execute :npm, "run", "build" 
-      end
-    end
-  end
-
   after :npm_install, :build
   after :publishing, :restart
   after :published, :npm_install
