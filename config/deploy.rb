@@ -25,6 +25,7 @@ set :deploy_to, "/var/www/iloilo-client-test"
 
 # Default value for linked_dirs is []
 # append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system"
+append :linked_dirs, "node_modules"
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
@@ -37,3 +38,31 @@ set :deploy_to, "/var/www/iloilo-client-test"
 
 # Uncomment the following to require manually verifying the host key before first deploy.
 # set :ssh_options, verify_host_key: :secure
+
+namespace :deploy do
+  desc "Restart application"
+    task :restart do
+    on roles(:app), in: :sequence, wait: 5 do
+    end
+  end
+
+  task :npm_install do
+    on roles(:app), in: :sequence, wait: 5 do
+      within release_path do
+        execute :npm, "install"
+      end
+    end
+  end
+
+  task :build do
+    on roles(:app), in: :sequence, wait: 5 do
+      within release_path do
+        execute :npm, "run", "build" 
+      end
+    end
+  end
+
+  after :npm_install, :build
+  after :publishing, :restart
+  after :published, :npm_install
+end
