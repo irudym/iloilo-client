@@ -93,6 +93,7 @@ export default new Vuex.Store({
     },
     [types.ADD_QUESTION](state, payload) {
       state.quiz.questions = [...state.quiz.questions, payload.question];
+      localStorage.setItem('quiz', JSON.stringify(state.quiz));
     },
     [types.SUBMIT_QUESTION](state, payload) {
       state.quiz.questions = state.quiz.questions.map((question) => {
@@ -104,6 +105,7 @@ export default new Vuex.Store({
         }
         return question;
       });
+      localStorage.setItem('quiz', JSON.stringify(state.quiz));
     },
   },
   actions: {

@@ -11,7 +11,7 @@
           </router-link>
         </div>
         <div class="form">
-          <error-message v-show="errorMessage" v-bind:message="errorMessage" />
+          <error-message v-show="errorMessage" v-bind:message="errorMessage" @close="closeError" />
           <float-label label="E-mail" v-bind:error="errors.email" :value="email">
             <input name="email" type="text" autocomplete="off" v-model="email" />
           </float-label>
@@ -33,6 +33,7 @@ import StartButton from '../components/StartButton.vue';
 import BigBlueBar from '../components/BigBlueBar.vue';
 import { login } from '../lib/api';
 import { serverUrl } from '../config/globals';
+import { localizeError } from '../lib/localize';
 
 const ErrorMessage = () => import('../components/ErrorMessage.vue');
 
@@ -55,6 +56,9 @@ export default {
   },
   methods: {
     ...mapActions(['loginUser']),
+    closeError() {
+      this.errorMessage = null;
+    },
     validate() {
       const errors = {};
       if (!this.email.trim()) {
@@ -75,15 +79,15 @@ export default {
         this.errors = {};
         try {
           const credentials = {
-            email: this.email,
-            password: this.password,
+            email: this.email.trim(),
+            password: this.password.trim(),
           };
           const response = await login({ url: serverUrl, credentials });
           // console.log('LOGIN: ', response);
           this.loginUser(response);
           this.$router.push('/quizzes');
         } catch (error) {
-          this.errorMessage = error;
+          this.errorMessage = localizeError(error);
         }
       }
     },

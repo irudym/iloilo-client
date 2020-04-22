@@ -3,12 +3,12 @@
     class="header d-flex flex-column flex-md-row align-items-center bg-white">
     <logo :width="'134px'"/>
     <nav class="my-2 my-md-0 mr-md-3 navigation">
-      <div class="p-2 text-dark links">
+      <div class="links">
         <router-link :to="'/about'">
          О проекте
        </router-link>
       </div>
-      <div class="p-2 text-dark links">
+      <div class="links">
         <router-link :to="'/contacts'">
           Контакты
         </router-link>
@@ -38,16 +38,13 @@ export default {
       background: transparent;
       font-family: Roboto;
       font-weight: 500;
-      font-size: 1.2rem;
-      color: $main-links-colour
+      font-size: 1rem;
+      color: $title-colour;
     }
-
-  .navigation {
-    margin-right: 3rem!important;
-  }
 
   .links {
     display: inline;
+    padding: 0 1rem;
   }
 
   .my-p-2 {

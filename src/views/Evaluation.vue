@@ -43,6 +43,7 @@
           </div>
           <div class="buttons">
             <start-button title="Вперед >" @click="forward"/>
+            <div v-if="currentQuestionIndex!=0" class="separator" />
             <start-button v-if="currentQuestionIndex!=0" title="< Назад" @click="back"/>
           </div>
         </div>
@@ -63,6 +64,7 @@ import { serverUrl } from '../config/globals';
 import { loadQuiz, evaluateQuestion } from '../lib/api';
 import { deSerializeQuiz, serializeQuiz, deSerializeQuestion } from '../lib/serializer';
 import { createCountFormatter } from '../lib/utils';
+import { localizeError } from '../lib/localize';
 
 const ErrorMessage = () => import('../components/ErrorMessage.vue');
 
@@ -129,7 +131,7 @@ export default {
       const timeId = setInterval(this.updateTime, 60000);
       this.setCountdownId(timeId);
     } catch (error) {
-      this.errorMessage = error;
+      this.errorMessage = localizeError(error);
       if (error.detail === 'Not enough or too many segments') {
         this.$router.push('/login');
       }
@@ -193,7 +195,7 @@ export default {
         const index = this.currentQuestionIndex;
         this.setCurrentQuestionIndex(index + 1);
       } catch (error) {
-        this.errorMessage = error;
+        this.errorMessage = localizeError(error);
       }
     },
     changeAnswer(id, value) {
@@ -282,5 +284,9 @@ h4 {
   font-weight: 500;
   font-size: 0.9rem;
   color: $warning-colour;
+}
+
+.separator {
+  width: 0.5rem;
 }
 </style>

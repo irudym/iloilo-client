@@ -31,6 +31,7 @@ import StartButton from '../components/StartButton.vue';
 import { serverUrl } from '../config/globals';
 import { getQuizInfo } from '../lib/api';
 import { sanitizeString } from '../lib/utils';
+import { localizeError } from '../lib/localize';
 
 const ErrorMessage = () => import('../components/ErrorMessage.vue');
 
@@ -93,8 +94,7 @@ export default {
         const timeId = setInterval(this.checkQuiz, 3000);
         this.setTimeInterval(timeId);
       } catch (error) {
-        this.errorMessage = error;
-        console.log('Quizzes.vue=> error', error);
+        this.errorMessage = localizeError(error);
         if (error.detail === 'Signature verification raised') {
           this.$router.push('/login');
         }
@@ -111,7 +111,7 @@ export default {
           this.$router.push(`/evaluation/${this.pin}`);
         }
       } catch (error) {
-        this.errorMessage = error;
+        this.errorMessage = localizeError(error);
       }
     },
     closeError() {

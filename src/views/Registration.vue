@@ -109,18 +109,14 @@ export default {
     async submit() {
       if (!this.validate()) {
         this.errors = {};
-        console.log('Submit: ', this.email, '  pass: ', this.password1);
         try {
           const user = {
             first_name: this.firstName,
             last_name: this.lastName,
-            email: this.email,
-            password: this.password1,
+            email: this.email.trim(),
+            password: this.password1.trim(),
           };
           const response = await signup({ url: serverUrl, user });
-          // console.log('RESPONSE: ', response);
-          // eslint-disable-next-line camelcase
-          // const { email, auth_token, id } = response;
           this.loginUser(response);
           this.$router.push('/quizzes');
         } catch (error) {
