@@ -1,6 +1,6 @@
 <template>
-  <div class="popup-menu">
-    <div class="menu-title" @click="click" tabindex="0" @focusout="close">
+  <div class="popup-menu" v-click-outside="close">
+    <div class="menu-title" @click="click">
       {{title}}
     </div>
     <div class="menu-container" :style="menuStyle">
@@ -14,6 +14,11 @@
 </template>
 
 <script>
+import Vue from 'vue';
+import vClickOutside from 'v-click-outside';
+
+Vue.use(vClickOutside);
+
 export default {
   name: 'PopupMenu',
   props: {
@@ -88,8 +93,8 @@ export default {
   }
 }
 
-// .popup-menu:hover .menu-container {
-//  display: block;
-// }
+.popup-menu:hover .menu-container {
+  display: block;
+}
 
 </style>
