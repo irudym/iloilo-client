@@ -44,11 +44,12 @@ import IloDialog from '../components/Dialog.vue';
 import FloatLabel from '../components/FloatLabel.vue';
 import StartButton from '../components/StartButton.vue';
 import AppHeader from '../components/AppHeader.vue';
-import ErrorMessage from '../components/ErrorMessage.vue';
 import { signup } from '../lib/api';
 import { serverUrl } from '../config/globals';
 import BigBlueBar from '../components/BigBlueBar.vue';
 // import IloSelect from '../components/IloSelect.vue';
+
+const ErrorMessage = () => import('../components/ErrorMessage.vue');
 
 /*
         <float-label label="Группа (необязательно)" v-bind:error="errors.email" :value="email">

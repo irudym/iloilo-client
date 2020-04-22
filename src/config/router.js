@@ -1,12 +1,14 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Login from '../views/Login.vue';
 import Logout from '../views/Logout.vue';
-import Registration from '../views/Registration.vue';
 import Quizzes from '../views/Quizzes.vue';
 import Evaluation from '../views/Evaluation.vue';
-import Result from '../views/Result.vue';
-import Profile from '../views/Profile.vue';
+
+// code splitting
+const Login = () => import(/* webpackChunkName: "login" */ '../views/Login.vue');
+const Registration = () => import(/* webpackChunkName: "registration" */ '../views/Registration.vue');
+const Profile = () => import(/* webpackChunkName: "profile" */ '../views/Profile.vue');
+const Result = () => import(/* webpackChunkName: "profile" */ '../views/Result.vue');
 
 Vue.use(VueRouter);
 

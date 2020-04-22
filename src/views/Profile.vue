@@ -54,13 +54,14 @@ import IloDialog from '../components/Dialog.vue';
 import FloatLabel from '../components/FloatLabel.vue';
 import StartButton from '../components/StartButton.vue';
 import AppHeader from '../components/AppHeader.vue';
-import ErrorMessage from '../components/ErrorMessage.vue';
 import { getUserInfo, updateUser } from '../lib/api';
 import { serverUrl } from '../config/globals';
 import BigBlueBar from '../components/BigBlueBar.vue';
-import InfoMessage from '../components/InfoMessage.vue';
 import OkButton from '../components/OkButton.vue';
 // import IloSelect from '../components/IloSelect.vue';
+
+const ErrorMessage = () => import('../components/ErrorMessage.vue');
+const InfoMessage = () => import('../components/InfoMessage.vue');
 
 export default {
   name: 'Profile',

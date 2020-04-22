@@ -30,10 +30,11 @@ import { mapActions } from 'vuex';
 import AppHeader from '../components/AppHeader.vue';
 import FloatLabel from '../components/FloatLabel.vue';
 import StartButton from '../components/StartButton.vue';
-import ErrorMessage from '../components/ErrorMessage.vue';
+import BigBlueBar from '../components/BigBlueBar.vue';
 import { login } from '../lib/api';
 import { serverUrl } from '../config/globals';
-import BigBlueBar from '../components/BigBlueBar.vue';
+
+const ErrorMessage = () => import('../components/ErrorMessage.vue');
 
 export default {
   name: 'Login',

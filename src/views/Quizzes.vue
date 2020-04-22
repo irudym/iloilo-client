@@ -28,11 +28,11 @@ import IloDialog from '../components/Dialog.vue';
 import AppHeader from '../components/AppHeader.vue';
 import FloatLabel from '../components/FloatLabel.vue';
 import StartButton from '../components/StartButton.vue';
-import ErrorMessage from '../components/ErrorMessage.vue';
 import { serverUrl } from '../config/globals';
 import { getQuizInfo } from '../lib/api';
 import { sanitizeString } from '../lib/utils';
 
+const ErrorMessage = () => import('../components/ErrorMessage.vue');
 
 export default {
   name: 'Quizzes',

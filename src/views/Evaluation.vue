@@ -57,13 +57,14 @@ import IloDialog from '../components/Dialog.vue';
 import AppHeader from '../components/AppHeader.vue';
 import Checkbox from '../components/Checkbox.vue';
 import StartButton from '../components/StartButton.vue';
-import ErrorMessage from '../components/ErrorMessage.vue';
 import OkButton from '../components/OkButton.vue';
 import RadialBar from '../components/RadialBar.vue';
 import { serverUrl } from '../config/globals';
 import { loadQuiz, evaluateQuestion } from '../lib/api';
 import { deSerializeQuiz, serializeQuiz, deSerializeQuestion } from '../lib/serializer';
 import { createCountFormatter } from '../lib/utils';
+
+const ErrorMessage = () => import('../components/ErrorMessage.vue');
 
 export default {
   name: 'Evaluation',
