@@ -39,7 +39,7 @@ import AppHeader from '../components/AppHeader.vue';
 import IloDialog from '../components/Dialog.vue';
 import BigBlueBar from '../components/BigBlueBar.vue';
 import OkButton from '../components/OkButton.vue';
-import { version } from '../../version/version';
+import { iloVersion } from '../../version/version';
 
 export default {
   name: 'About',

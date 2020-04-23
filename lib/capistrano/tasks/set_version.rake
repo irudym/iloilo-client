@@ -4,8 +4,8 @@ namespace :deploy do
     on roles(:app), in: :sequence, wait: 5 do
       within shared_path do
         location = "#{shared_path}/version/version.js"
-        text = "export const version = () => ('#{Time.now}');\n"
-        execute :echo, "\"#{text}\"", '>>', location
+        text = "export const iloVersion = () => ('#{Time.now}');\n"
+        execute :echo, "\"#{text}\"", '>', location
       end
     end
   end
