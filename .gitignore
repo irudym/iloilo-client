@@ -29,6 +29,6 @@ yarn-error.log*
 log/capistrano.log
 
 # build version file as it should be created bay capistrano during deployment
-/version/version.js
+/version
 
 
