@@ -26,6 +26,9 @@
           Ilo Ilo [<i>оценивать</i> на малазийском языке] - приложение для удаленного создания
           тестов и оценки знаний студентов.
         </p>
+        <div class="version">
+          {{currentBuild}}
+        </div>
       </ilo-dialog>
     </big-blue-bar>
   </div>
@@ -36,6 +39,7 @@ import AppHeader from '../components/AppHeader.vue';
 import IloDialog from '../components/Dialog.vue';
 import BigBlueBar from '../components/BigBlueBar.vue';
 import OkButton from '../components/OkButton.vue';
+import { version } from '../version';
 
 export default {
   name: 'About',
@@ -45,14 +49,26 @@ export default {
     BigBlueBar,
     OkButton,
   },
+  mounted() {
+    console.log('process.env= ', process.env);
+  },
   methods: {
     exit() {
       this.$router.go(-1);
+    },
+  },
+  computed: {
+    currentBuild() {
+      return `Current build: ${version()}`;
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+
+.version {
+  font-size: 0.6rem;
+}
 
 </style>

@@ -13,6 +13,7 @@ module.exports = {
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'off' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'off' : 'off',
+    "import/prefer-default-export": "off",
   },
   overrides: [
     {
@@ -27,7 +28,8 @@ module.exports = {
         'max-len': ["error", { "code": 180 }],
         'vue/valid-v-model': "off",
         "no-console": "off",
-        "import/no-unresolved": "off"
+        "import/no-unresolved": "off",
+        "import/prefer-default-export": "off",
       }
     },
   ],

@@ -2,7 +2,7 @@
   <div
     class="header d-flex flex-column flex-md-row align-items-center bg-white">
     <logo :width="'134px'"/>
-    <nav class="my-2 my-md-0 mr-md-3 navigation">
+    <nav class="my-2 my-md-0 navigation">
       <div class="links">
         <router-link :to="'/about'">
          О проекте
@@ -44,7 +44,13 @@ export default {
 
   .links {
     display: inline;
-    padding: 0 1rem;
+    padding: 0 3rem;
+  }
+
+  @media screen and (max-width: 370px) {
+    .links {
+      padding: 0 1rem;
+    }
   }
 
   .my-p-2 {

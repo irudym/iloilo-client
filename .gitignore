@@ -27,3 +27,7 @@ yarn-error.log*
 *.sw?
 
 log/capistrano.log
+
+# build version file as it should be created bay capistrano during deployment
+/src/version.js
+

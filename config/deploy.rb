@@ -25,7 +25,7 @@ set :deploy_to, "/var/www/iloilo-client"
 
 # Default value for linked_dirs is []
 # append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system"
-append :linked_dirs, "node_modules"
+append :linked_dirs, "node_modules", "version"
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
@@ -46,7 +46,8 @@ namespace :deploy do
     end
   end
 
-  after :npm_install, :build
+  after :npm_install, :set_version
+  after :set_version, :build
   after :publishing, :restart
   after :published, :npm_install
 end
