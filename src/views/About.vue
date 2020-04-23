@@ -59,7 +59,7 @@ export default {
   },
   computed: {
     currentBuild() {
-      return `build: ${version()}`;
+      return `build: ${iloVersion()}`;
     },
   },
 };
