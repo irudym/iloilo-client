@@ -46,8 +46,8 @@ namespace :deploy do
     end
   end
 
-  after :npm_install, :build
-  # after :set_version, :build
+  after :npm_install, :set_version
+  after :set_version, :build
   after :publishing, :restart
   after :published, :npm_install
 end
