@@ -3,27 +3,17 @@
     <app-header />
     <big-blue-bar>
       <div class="dialog">
-        <h1>Вход</h1>
-        <div class="first">
-          В первый раз? Тогда
-          <router-link to="/registration">
-            зарегистрируйтесь!
-          </router-link>
-        </div>
-        <form class="form">
-          <error-message v-show="errorMessage" v-bind:message="errorMessage" @close="closeError" />
+        <h1>Сброс пароля</h1>
+        <error-message v-show="errorMessage" v-bind:message="errorMessage" @close="closeError" />
+        <form v-show="showForm" class="form">
           <float-label label="E-mail" v-bind:error="errors.email" :value="email">
             <input name="email" type="text" autocomplete="off" v-model="email" />
           </float-label>
-          <float-label label="Пароль" v-bind:error="errors.password" :value="password">
-            <input name="password" type="password" autocomplete="off" v-model="password" />
-          </float-label>
-          <start-button title="Дальше >" @click="submit"/>
+          <start-button title="Изменить" @click="submit" />
         </form>
-        <div class="password-forgot">
-          <router-link to="/forgot_password">
-            Забыли пароль?
-          </router-link>
+        <div v-show="notice" class="form">
+          Запрос на изменение отправлен. На ваш электронный почтовый ящик
+          должно прийти письмо с ссылкой на сброс пароля.
         </div>
       </div>
     </big-blue-bar>
@@ -31,12 +21,11 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
 import AppHeader from '../components/AppHeader.vue';
 import FloatLabel from '../components/FloatLabel.vue';
 import StartButton from '../components/StartButton.vue';
 import BigBlueBar from '../components/BigBlueBar.vue';
-import { login } from '../lib/api';
+import { passwordReset } from '../lib/api';
 import { serverUrl } from '../config/globals';
 import { localizeError } from '../lib/localize';
 
@@ -55,12 +44,16 @@ export default {
     return {
       errors: {},
       email: '',
-      password: '',
       errorMessage: null,
+      notice: null,
     };
   },
+  computed: {
+    showForm() {
+      return !this.notice;
+    },
+  },
   methods: {
-    ...mapActions(['loginUser']),
     closeError() {
       this.errorMessage = null;
     },
@@ -68,9 +61,6 @@ export default {
       const errors = {};
       if (!this.email.trim()) {
         errors.email = ['необходимо указать адрес электронной почты'];
-      }
-      if (!this.password.trim()) {
-        errors.password = ['поле пароля не может быть пустым'];
       }
       if (Object.keys(errors).length !== 0) {
         // show errors
@@ -83,14 +73,11 @@ export default {
       if (!this.validate()) {
         this.errors = {};
         try {
-          const credentials = {
-            email: this.email.trim(),
-            password: this.password.trim(),
-          };
-          const response = await login({ url: serverUrl, credentials });
-          // console.log('LOGIN: ', response);
-          this.loginUser(response);
-          this.$router.push('/quizzes');
+          await passwordReset({
+            url: serverUrl,
+            email: this.email,
+          });
+          this.notice = true;
         } catch (error) {
           this.errorMessage = localizeError(error);
         }
@@ -138,14 +125,6 @@ export default {
     .form {
       width: 95%!important;
     }
-  }
-}
-
-.password-forgot {
-  text-align: center;
-  a {
-    font-weight: 700;
-    color: $options_edit-color;
   }
 }
 

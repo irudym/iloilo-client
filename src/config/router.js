@@ -8,7 +8,9 @@ import Evaluation from '../views/Evaluation.vue';
 const Login = () => import(/* webpackChunkName: "login" */ '../views/Login.vue');
 const Registration = () => import(/* webpackChunkName: "registration" */ '../views/Registration.vue');
 const Profile = () => import(/* webpackChunkName: "profile" */ '../views/Profile.vue');
-const Result = () => import(/* webpackChunkName: "profile" */ '../views/Result.vue');
+const Result = () => import(/* webpackChunkName: "result" */ '../views/Result.vue');
+const PasswordReset = () => import(/* webpackChunkName: "pass_reset" */ '../views/PasswordReset.vue');
+const ForgotPassword = () => import(/* webpackChunkName: "pass_forgot" */ '../views/ForgotPassword.vue');
 
 Vue.use(VueRouter);
 
@@ -54,6 +56,17 @@ const routes = [
     path: '/user/profile',
     name: 'Profile',
     component: Profile,
+  },
+  {
+    path: '/password_reset/:token',
+    name: 'password_reset',
+    component: PasswordReset,
+    props: true,
+  },
+  {
+    path: '/forgot_password',
+    name: 'forgot_password',
+    component: ForgotPassword,
   },
   {
     path: '/about',

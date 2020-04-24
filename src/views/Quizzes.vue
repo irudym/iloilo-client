@@ -10,12 +10,12 @@
             Ожидайте начала теста
           </div>
         </div>
-        <div v-else>
+        <form v-else>
           <float-label label="PIN" v-bind:error="errors.pin" :value="pin">
             <input name="PIN" type="text" autocomplete="off" v-model="pin" />
           </float-label>
           <start-button title="Подключиться >" @click="start" />
-        </div>
+        </form>
       </ilo-dialog>
     </big-blue-bar>
    </div>

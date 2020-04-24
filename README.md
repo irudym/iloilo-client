@@ -21,6 +21,18 @@ In order to setup the project, run following command
 yarn install
 ```
 
+In addition to that it's required to create a file version.js to track the build version in About view. During deployment process this file creates automatically by Capistrano deploy scripts.
+To create a file run following command in the project root directory:
+```
+mkdir version
+```
+and put following text to to file **version/version.js**:
+```
+export const iloVersion = () => ('development');
+
+```
+(with new line at the end)
+
 ## Deployment
 For deploying purposes the application uses [Capistrano](https://capistranorb.com/) - a remote server automation tool. The builded application may be server as static pages. 
 

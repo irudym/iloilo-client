@@ -40,6 +40,61 @@ export const login = async ({ url, credentials }) => {
   }
 };
 
+/**
+ * Send reset password request to API server
+ * @param {string} url - API server URL
+ * @param {string} email - User's email
+ */
+export const passwordReset = async ({ url, email }) => {
+  try {
+    await axios.post(`${url}/password_resets`, { email },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  } catch (error) {
+    throw constructError(error);
+  }
+};
+
+/**
+ * Reset user password
+ * @param {string} url - API server URL
+ * @param {string} token - Security password rest token
+ * @param {string} password - User's new password
+ */
+export const updatePassword = async ({ url, token, password }) => {
+  try {
+    await axios.patch(`${url}/password_resets/${token}`, { password },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  } catch (error) {
+    throw constructError(error);
+  }
+};
+
+/**
+ * Check if password reset token is valid
+ * @param {string} url - API server URL
+ * @param {string} token - Security password resent token
+ */
+export const checkPasswordReset = async ({ url, token }) => {
+  try {
+    await axios.get(`${url}/password_resets/${token}`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  } catch (error) {
+    throw constructError(error);
+  }
+};
+
 export const getUserInfo = async ({ url, token, id }) => {
   try {
     const response = await axios.get(`${url}/users/${id}`, {

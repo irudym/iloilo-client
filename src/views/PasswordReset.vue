@@ -3,40 +3,38 @@
     <app-header />
     <big-blue-bar>
       <div class="dialog">
-        <h1>Вход</h1>
-        <div class="first">
-          В первый раз? Тогда
-          <router-link to="/registration">
-            зарегистрируйтесь!
-          </router-link>
-        </div>
+        <h1>Сброс пароля</h1>
         <form class="form">
           <error-message v-show="errorMessage" v-bind:message="errorMessage" @close="closeError" />
-          <float-label label="E-mail" v-bind:error="errors.email" :value="email">
-            <input name="email" type="text" autocomplete="off" v-model="email" />
-          </float-label>
-          <float-label label="Пароль" v-bind:error="errors.password" :value="password">
-            <input name="password" type="password" autocomplete="off" v-model="password" />
-          </float-label>
-          <start-button title="Дальше >" @click="submit"/>
-        </form>
-        <div class="password-forgot">
-          <router-link to="/forgot_password">
-            Забыли пароль?
-          </router-link>
+          <div v-show="showForm">
+            <float-label label="Пароль" v-bind:error="errors.password" :value="password1">
+              <input name="password" type="password" autocomplete="off" v-model="password1" />
+            </float-label>
+            <float-label label="Повторите пароль"
+              v-bind:error="errors.password"
+              :value="password2"
+            >
+              <input name="password" type="password" autocomplete="off" v-model="password2" />
+            </float-label>
+            <start-button title="Изменить" @click="submit" />
+          </div>
+          <div v-show="notice" class="form">
+            Пароль был успешно изменен! Пожалуйста, авторизуйтесь в приложении,
+            используя новые параметры входа.
+            <start-button title="Дальше >" @click="toLogin" />
         </div>
+        </form>
       </div>
     </big-blue-bar>
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex';
 import AppHeader from '../components/AppHeader.vue';
 import FloatLabel from '../components/FloatLabel.vue';
 import StartButton from '../components/StartButton.vue';
 import BigBlueBar from '../components/BigBlueBar.vue';
-import { login } from '../lib/api';
+import { updatePassword, checkPasswordReset } from '../lib/api';
 import { serverUrl } from '../config/globals';
 import { localizeError } from '../lib/localize';
 
@@ -51,26 +49,48 @@ export default {
     ErrorMessage,
     BigBlueBar,
   },
+  props: {
+    token: String,
+  },
   data() {
     return {
       errors: {},
-      email: '',
-      password: '',
+      password1: '',
+      password2: '',
       errorMessage: null,
+      notice: null,
     };
   },
+  async mounted() {
+    // check if token valid
+    try {
+      await checkPasswordReset({
+        url: serverUrl,
+        token: this.token,
+      });
+    } catch (error) {
+      this.errorMessage = error;
+    }
+  },
+  computed: {
+    showForm() {
+      return !this.errorMessage && !this.notice;
+    },
+  },
   methods: {
-    ...mapActions(['loginUser']),
     closeError() {
       this.errorMessage = null;
     },
+    toLogin() {
+      this.$router.push('/login');
+    },
     validate() {
       const errors = {};
-      if (!this.email.trim()) {
-        errors.email = ['необходимо указать адрес электронной почты'];
+      if (!this.password1.trim()) {
+        errors.password = ['поле пароль не может быть пустым'];
       }
-      if (!this.password.trim()) {
-        errors.password = ['поле пароля не может быть пустым'];
+      if (this.password1 !== this.password2) {
+        errors.password = ['введённые пароли не совпадают'];
       }
       if (Object.keys(errors).length !== 0) {
         // show errors
@@ -83,14 +103,11 @@ export default {
       if (!this.validate()) {
         this.errors = {};
         try {
-          const credentials = {
-            email: this.email.trim(),
-            password: this.password.trim(),
-          };
-          const response = await login({ url: serverUrl, credentials });
-          // console.log('LOGIN: ', response);
-          this.loginUser(response);
-          this.$router.push('/quizzes');
+          await updatePassword({
+            url: serverUrl,
+            token: this.token,
+            password: this.password1,
+          });
         } catch (error) {
           this.errorMessage = localizeError(error);
         }
@@ -138,14 +155,6 @@ export default {
     .form {
       width: 95%!important;
     }
-  }
-}
-
-.password-forgot {
-  text-align: center;
-  a {
-    font-weight: 700;
-    color: $options_edit-color;
   }
 }
 
