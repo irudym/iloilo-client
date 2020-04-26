@@ -64,7 +64,7 @@ export default {
   }
 }
 
-@media screen and (max-width: 370px) {
+@media screen and (max-width: 510px) {
   .links {
     padding: 0 1rem;
   }
