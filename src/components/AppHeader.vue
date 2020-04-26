@@ -4,6 +4,9 @@
     <logo :width="'134px'"/>
     <nav class="my-2 my-md-0 navigation">
       <div class="links">
+        <router-link :to="'/quizzes'">
+          Тесты
+        </router-link>
         <router-link :to="'/about'">
          О проекте
        </router-link>
