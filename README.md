@@ -6,7 +6,7 @@ The application which allows users to connect to iLoiLo quizzes and answer quest
 installed NodeJS on your machine.
 
 ## Features
-There are many tools to create quizzes and tests, evaluate knowledge of students, colleagues, and just friends. However many of the tools are overloaded with features and sometimes it's hard to use them. The objectives of this application to create a simple and yet powerful tool to create test, collect responses and build reports with detailed information. 
+There are many tools to create quizzes and tests, evaluate knowledge of students, colleagues, and just friends. However many of the tools are overloaded with features and sometimes it's hard to use them. The objectives of this application to create a simple and yet powerful tool to create tests, collect responses and build reports with detailed information. 
 
 
 ## Project setup
@@ -34,13 +34,13 @@ export const iloVersion = () => ('development');
 (with new line at the end)
 
 ## Deployment
-For deploying purposes the application uses [Capistrano](https://capistranorb.com/) - a remote server automation tool. The builded application may be server as static pages. 
+For deploying purposes the application uses [Capistrano](https://capistranorb.com/) - a remote server automation tool. The builded application may be served as static pages. 
 
 ### Configuration
 The deployment scripts are places to **config/deploy** and **/lib/capistrano/tasks**. In order to set deployment destination it's necessary to edit **/config/deploy.rb** and specify a directory at a remote server, in addition to that in **/config/deploy/production.rb** need to set remote server address (or name) and an user. The web server should be configured manually. Application production files will be deployed to /application_dir/dist directory.  
 
 ### Deploying
-To deploy the project on any remote server with *ngnix* or *apache* installed, run following command. Before running deployment script, ensure that project directory exists on the remote server and specified in the configuration user has access to that directory. 
+To deploy the project on any remote server with *ngnix* or *apache* installed, run following command. Before running deployment script, ensure that project directory exists on the remote server and the configuration user has an access to that directory. 
 ```
 cap production deploy
 ```
