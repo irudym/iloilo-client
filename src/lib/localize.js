@@ -6,6 +6,8 @@ const translateMap = {
   'Validation failed: Active quiz must exist': 'Тест с таким PIN кодом недоступен',
   'Quiz is inactive': 'Тест завершился',
   'Sorry the quiz is finished, try the next time': 'Время теста истекло',
+  'Error!': 'Ошибка!',
+  'Network Error': 'Проблема с подключением к сети',
 };
 
 const translateString = (string) => (translateMap[string] || string);

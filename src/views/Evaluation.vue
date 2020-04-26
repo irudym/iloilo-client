@@ -86,7 +86,6 @@ export default {
     return {
       errors: {},
       errorMessage: null,
-      // showSubmit: false,
       progress: 0,
     };
   },
@@ -114,9 +113,11 @@ export default {
         this.loadQuiz(quiz);
       }
 
+      this.sanityCheck();
+
       this.progress = this.duration;
       const currentTime = new Date();
-      // console.log('Evaluation=> quiz: ', quiz);
+
       const endTime = new Date(quiz.ended_at);
       this.progress = Math.round((endTime - currentTime) / 60000);
 
@@ -139,7 +140,7 @@ export default {
   },
   methods: {
     ...mapActions(['loadQuiz', 'clearQuiz', 'setAnswerValue', 'setCurrentQuestionIndex',
-      'submitQuestion', 'addQuestion', 'setCountdownId']),
+      'submitQuestion', 'unsubmitQuestion', 'addQuestion', 'setCountdownId']),
     updateTime() {
       this.progress -= 1;
       if (this.progress < 0) this.progress = this.duration;
@@ -151,18 +152,33 @@ export default {
       this.errorMessage = null;
     },
     back() {
+      this.errorMessage = null;
       let index = this.currentQuestionIndex;
       index -= 1;
       if (index < 0) {
         index = 0;
       }
       this.setCurrentQuestionIndex(index);
+      this.sanityCheck();
     },
     validate() {
       const answers = this.answers.filter((answer) => (answer.correct));
       // console.log('Answers: ', answers);
       if (answers.length === 0) return false;
       return true;
+    },
+    sanityCheck() {
+      console.log('[Evaluation.vue]=> sanityCheck');
+      if (this.quiz.questions[this.currentQuestionIndex].submitted) {
+        console.log('[Evaluation.vue]=> sanityCheck=> question submitted: ', this.quiz.questions[this.currentQuestionIndex]);
+        const answers = this.quiz.questions[this.currentQuestionIndex]
+          .answers.filter((answer) => (answer.correct));
+        if (answers.length === 0) {
+          console.log('');
+          console.log('[Evaluation.vue]=> sanityCheck=> ERROR, need to unsubmit!');
+          this.unsubmitQuestion(this.quiz.questions[this.currentQuestionIndex]);
+        }
+      }
     },
     async forward() {
       this.errorMessage = null;
@@ -171,29 +187,37 @@ export default {
         return;
       }
       try {
-        if (!this.quiz.questions[this.currentQuestionIndex].submitted) {
-          const quiz = serializeQuiz(this.getQuiz);
-          const response = await evaluateQuestion({
-            url: serverUrl,
-            pin: this.pin,
-            token: this.getToken,
-            quiz,
-          });
-          // console.log('Evaluation=> RESPONSE: ', response);
-          if (response.data.type === 'question') {
-            // add question to the quiz
-            const question = deSerializeQuestion(response);
-            // console.log('Evaluation=> QUESTION: ', question);
-            this.addQuestion(question);
-            this.submitQuestion(this.quiz.questions[this.currentQuestionIndex]);
-          } else {
-            this.clearQuiz();
-            this.$router.push(`/result/${response.data.attributes.score}`);
+        // check is there is next question
+        if (this.currentQuestionIndex + 1 >= this.quiz.questions.length) {
+          if (!this.quiz.questions[this.currentQuestionIndex].submitted) {
+            const quiz = serializeQuiz(this.getQuiz);
+            const response = await evaluateQuestion({
+              url: serverUrl,
+              pin: this.pin,
+              token: this.getToken,
+              quiz,
+            });
+            // console.log('Evaluation=> RESPONSE: ', response);
+            if (response.data.type === 'question') {
+              // add question to the quiz
+              const question = deSerializeQuestion(response);
+              this.addQuestion(question);
+            } else {
+              this.clearQuiz();
+              this.$router.push(`/result/${response.data.attributes.score}`);
+            }
           }
         }
+        // mark question as submitted
+        this.submitQuestion(this.quiz.questions[this.currentQuestionIndex]);
         // move to next question
         const index = this.currentQuestionIndex;
         this.setCurrentQuestionIndex(index + 1);
+        // sanity check
+        // submitted quiz should contain at least one selected answer
+        // however it appeared, that in some rare cases a question field
+        // 'submitted' might be set to true, but no answers selected!
+        this.sanityCheck();
       } catch (error) {
         this.errorMessage = localizeError(error);
       }

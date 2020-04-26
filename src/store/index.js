@@ -20,7 +20,7 @@ const initialState = {
     user_name: Cookies.get(COOKIE_USER_NAME),
   },
   quiz: localStorage.getItem('quiz') ? JSON.parse(localStorage.getItem('quiz')) : { questions: [] },
-  currentQuestionIndex: 0,
+  currentQuestionIndex: localStorage.getItem('current_question_index') ? JSON.parse(localStorage.getItem('current_question_index')) : 0,
   timeIntervalId: null,
   countdownId: null,
 };
@@ -61,17 +61,19 @@ export default new Vuex.Store({
     },
     [types.LOAD_QUIZ](state, payload) {
       state.quiz = { ...payload.quiz };
+      state.currentQuestionIndex = 0;
       localStorage.setItem('quiz', JSON.stringify(payload.quiz));
-      console.log('StoreIndex.js=> quiz loaded: ', state.quiz);
+      localStorage.setItem('current_question_index', JSON.stringify(0));
     },
     [types.CLEAR_QUIZ](state) {
       state.quiz = { questions: [] };
       localStorage.setItem('quiz', JSON.stringify(state.quiz));
       state.currentQuestionIndex = 0;
-      console.log('StoreIndex.js=> clear quiz, new state: ', state.quiz);
+      localStorage.setItem('current_question_index', JSON.stringify(0));
     },
     [types.SET_CURRENT_QUESTION_INDEX](state, payload) {
       state.currentQuestionIndex = payload.index;
+      localStorage.setItem('current_question_index', JSON.stringify(state.currentQuestionIndex));
     },
     [types.SET_ANSWER_VALUE](state, payload) {
       state.quiz.questions[state.currentQuestionIndex].answers = state.quiz.questions[
@@ -107,6 +109,18 @@ export default new Vuex.Store({
       });
       localStorage.setItem('quiz', JSON.stringify(state.quiz));
     },
+    [types.UNSUBMIT_QUESTION](state, payload) {
+      state.quiz.questions = state.quiz.questions.map((question) => {
+        if (question.id === payload.question.id) {
+          return {
+            ...question,
+            submitted: false,
+          };
+        }
+        return question;
+      });
+      localStorage.setItem('quiz', JSON.stringify(state.quiz));
+    },
   },
   actions: {
     loginUser(context, user) {
@@ -135,6 +149,9 @@ export default new Vuex.Store({
     },
     submitQuestion(context, question) {
       context.commit(types.SUBMIT_QUESTION, { question });
+    },
+    unsubmitQuestion(context, question) {
+      context.commit(types.UNSUBMIT_QUESTION, { question });
     },
     setCountdownId(context, id) {
       context.commit(types.SET_COUNTDOWN_ID, { id });

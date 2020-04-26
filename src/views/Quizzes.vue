@@ -62,6 +62,7 @@ export default {
     ...mapActions(['setTimeInterval', 'clearQuiz']),
     async start() {
       this.errorMessage = null;
+      this.errors = {};
       if (this.pin.trim() === '') {
         const errors = {};
         errors.pin = ['Необходимо ввести PIN теста'];
@@ -78,7 +79,7 @@ export default {
           pin,
         });
         // console.log('Quizzes.vue=> QUIZZES[response]: ', response);
-        this.clearQuiz();
+        // this.clearQuiz();
 
         if (response.data.type === 'evaluation') {
           this.$router.push(`/result/${response.data.attributes.score}`);
@@ -87,7 +88,7 @@ export default {
         this.connected = true;
         this.info = response.data.attributes;
 
-        this.clearQuiz();
+        // this.clearQuiz();
         if (this.info.started) {
           this.$router.push(`/evaluation/${pin}`);
         }
