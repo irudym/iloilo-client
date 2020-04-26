@@ -9,7 +9,8 @@
           <float-label label="E-mail" v-bind:error="errors.email" :value="email">
             <input name="email" type="text" autocomplete="off" v-model="email" />
           </float-label>
-          <start-button title="Изменить" @click="submit" />
+          <loading-button v-if="loading" />
+          <start-button v-else title="Сбросить" @click="submit" />
         </form>
         <div v-show="notice" class="form">
           Запрос на изменение отправлен. На ваш электронный почтовый ящик
@@ -24,6 +25,7 @@
 import AppHeader from '../components/AppHeader.vue';
 import FloatLabel from '../components/FloatLabel.vue';
 import StartButton from '../components/StartButton.vue';
+import LoadingButton from '../components/LoadingButton.vue';
 import BigBlueBar from '../components/BigBlueBar.vue';
 import { passwordReset } from '../lib/api';
 import { serverUrl } from '../config/globals';
@@ -39,6 +41,7 @@ export default {
     StartButton,
     ErrorMessage,
     BigBlueBar,
+    LoadingButton,
   },
   data() {
     return {
@@ -46,6 +49,7 @@ export default {
       email: '',
       errorMessage: null,
       notice: null,
+      loading: false,
     };
   },
   computed: {
@@ -71,6 +75,7 @@ export default {
     },
     async submit() {
       if (!this.validate()) {
+        this.loading = true;
         this.errors = {};
         try {
           await passwordReset({
@@ -80,6 +85,7 @@ export default {
           this.notice = true;
         } catch (error) {
           this.errorMessage = localizeError(error);
+          this.loading = false;
         }
       }
     },

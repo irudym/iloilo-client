@@ -50,7 +50,6 @@ export default {
     OkButton,
   },
   mounted() {
-    console.log('process.env= ', process.env);
   },
   methods: {
     exit() {

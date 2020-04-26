@@ -16,9 +16,10 @@
             >
               <input name="password" type="password" autocomplete="off" v-model="password2" />
             </float-label>
-            <start-button title="Изменить" @click="submit" />
+            <loading-button v-if="loading" />
+            <start-button v-else title="Изменить" @click="submit" />
           </div>
-          <div v-show="notice" class="form">
+          <div v-show="notice" class="notice">
             Пароль был успешно изменен! Пожалуйста, авторизуйтесь в приложении,
             используя новые параметры входа.
             <start-button title="Дальше >" @click="toLogin" />
@@ -33,6 +34,7 @@
 import AppHeader from '../components/AppHeader.vue';
 import FloatLabel from '../components/FloatLabel.vue';
 import StartButton from '../components/StartButton.vue';
+import LoadingButton from '../components/LoadingButton.vue';
 import BigBlueBar from '../components/BigBlueBar.vue';
 import { updatePassword, checkPasswordReset } from '../lib/api';
 import { serverUrl } from '../config/globals';
@@ -48,6 +50,7 @@ export default {
     StartButton,
     ErrorMessage,
     BigBlueBar,
+    LoadingButton,
   },
   props: {
     token: String,
@@ -59,6 +62,7 @@ export default {
       password2: '',
       errorMessage: null,
       notice: null,
+      loading: false,
     };
   },
   async mounted() {
@@ -101,6 +105,7 @@ export default {
     },
     async submit() {
       if (!this.validate()) {
+        this.loading = true;
         this.errors = {};
         try {
           await updatePassword({
@@ -108,8 +113,10 @@ export default {
             token: this.token,
             password: this.password1,
           });
+          this.notice = true;
         } catch (error) {
           this.errorMessage = localizeError(error);
+          this.loading = false;
         }
       }
     },
