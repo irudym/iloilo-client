@@ -48,7 +48,8 @@
             </p>
           </div>
           <div class="buttons">
-            <start-button title="Вперед >" @click="forward"/>
+            <loading-button v-if="uploading" />
+            <start-button v-else title="Вперед >" @click="forward"/>
             <div v-if="currentQuestionIndex!=0" class="separator" />
             <start-button v-if="currentQuestionIndex!=0" title="< Назад" @click="back"/>
           </div>
@@ -65,6 +66,7 @@ import AppHeader from '../components/AppHeader.vue';
 import Checkbox from '../components/Checkbox.vue';
 import StartButton from '../components/StartButton.vue';
 import OkButton from '../components/OkButton.vue';
+import LoadingButton from '../components/LoadingButton.vue';
 import RadialBar from '../components/RadialBar.vue';
 import { serverUrl } from '../config/globals';
 import { loadQuiz, evaluateQuestion } from '../lib/api';
@@ -83,6 +85,7 @@ export default {
     ErrorMessage,
     IloDialog,
     OkButton,
+    LoadingButton,
     RadialBar,
   },
   props: {
