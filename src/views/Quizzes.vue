@@ -69,7 +69,7 @@ export default {
         this.errors = errors;
         return;
       }
-      const pin = sanitizeString(this.pin);
+      const pin = sanitizeString(this.pin).toUpperCase();
       this.pin = pin;
       // get quiz information
       try {
