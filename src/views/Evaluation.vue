@@ -24,8 +24,14 @@
         />
         <div>
           <h4>Вопрос {{currentQuestionIndex+1}}</h4>
-          <div class="notification" v-if="submitted">
+          <div v-if="submitted" class="notification">
             Вы уже ответили на этот вопрос
+          </div>
+          <div v-else-if="uploading" class="notification">
+            Отправляем вопрос...
+          </div>
+          <div v-else class="notification placeholder">
+            ...
           </div>
           <div class="questions">
             {{currentQuestion}}
@@ -35,7 +41,7 @@
               <checkbox
                 :value="answer.correct"
                 @input="changeAnswer(answer.id, $event)"
-                :disabled="submitted"
+                :disabled="checkboxDisabled"
               >
               {{answer.text}}
               </checkbox>
@@ -113,7 +119,13 @@ export default {
         this.loadQuiz(quiz);
       }
 
-      this.sanityCheck();
+      // check that the last question is not in uploading state
+      // if this the case - re-submit it
+      const lastIndex = this.quiz.questions.length - 1;
+      if (this.quiz.questions[lastIndex].uploading) {
+        this.moveToLastQuestionIndex();
+        this.submitQuiz();
+      }
 
       this.progress = this.duration;
       const currentTime = new Date();
@@ -140,7 +152,8 @@ export default {
   },
   methods: {
     ...mapActions(['loadQuiz', 'clearQuiz', 'setAnswerValue', 'setCurrentQuestionIndex',
-      'submitQuestion', 'unsubmitQuestion', 'addQuestion', 'setCountdownId']),
+      'submitQuestion', 'unsubmitQuestion', 'addQuestion', 'setCountdownId',
+      'increaseQuestionIndex', 'decreaseQuestionIndex', 'uploadQuestion', 'moveToLastQuestionIndex']),
     updateTime() {
       this.progress -= 1;
       if (this.progress < 0) this.progress = this.duration;
@@ -153,13 +166,8 @@ export default {
     },
     back() {
       this.errorMessage = null;
-      let index = this.currentQuestionIndex;
-      index -= 1;
-      if (index < 0) {
-        index = 0;
-      }
-      this.setCurrentQuestionIndex(index);
-      this.sanityCheck();
+      this.decreaseQuestionIndex();
+      // this.sanityCheck();
     },
     validate() {
       const answers = this.answers.filter((answer) => (answer.correct));
@@ -167,17 +175,31 @@ export default {
       if (answers.length === 0) return false;
       return true;
     },
-    sanityCheck() {
-      console.log('[Evaluation.vue]=> sanityCheck');
-      if (this.quiz.questions[this.currentQuestionIndex].submitted) {
-        console.log('[Evaluation.vue]=> sanityCheck=> question submitted: ', this.quiz.questions[this.currentQuestionIndex]);
-        const answers = this.quiz.questions[this.currentQuestionIndex]
-          .answers.filter((answer) => (answer.correct));
-        if (answers.length === 0) {
-          console.log('');
-          console.log('[Evaluation.vue]=> sanityCheck=> ERROR, need to unsubmit!');
-          this.unsubmitQuestion(this.quiz.questions[this.currentQuestionIndex]);
+    async submitQuiz() {
+      try {
+        const quiz = serializeQuiz(this.getQuiz);
+
+        const currentIndex = this.currentQuestionIndex;
+        const response = await evaluateQuestion({
+          url: serverUrl,
+          pin: this.pin,
+          token: this.getToken,
+          quiz,
+        });
+        if (response.data.type === 'question') {
+          // add question to the quiz
+          const question = deSerializeQuestion(response);
+          this.addQuestion(question);
+          this.submitQuestion(this.quiz.questions[currentIndex]);
+
+          // move to the last question
+          this.moveToLastQuestionIndex();
+        } else {
+          this.clearQuiz();
+          this.$router.push(`/result/${response.data.attributes.score}`);
         }
+      } catch (error) {
+        this.errorMessage = error;
       }
     },
     async forward() {
@@ -186,40 +208,20 @@ export default {
         this.errorMessage = { title: 'Ошибка', detail: 'Необходимо выбрать хотя бы один ответ' };
         return;
       }
-      try {
-        // check is there is next question
-        if (this.currentQuestionIndex + 1 >= this.quiz.questions.length) {
-          if (!this.quiz.questions[this.currentQuestionIndex].submitted) {
-            const quiz = serializeQuiz(this.getQuiz);
-            const response = await evaluateQuestion({
-              url: serverUrl,
-              pin: this.pin,
-              token: this.getToken,
-              quiz,
-            });
-            // console.log('Evaluation=> RESPONSE: ', response);
-            if (response.data.type === 'question') {
-              // add question to the quiz
-              const question = deSerializeQuestion(response);
-              this.addQuestion(question);
-            } else {
-              this.clearQuiz();
-              this.$router.push(`/result/${response.data.attributes.score}`);
-            }
-          }
-        }
-        // mark question as submitted
-        this.submitQuestion(this.quiz.questions[this.currentQuestionIndex]);
-        // move to next question
-        const index = this.currentQuestionIndex;
-        this.setCurrentQuestionIndex(index + 1);
-        // sanity check
-        // submitted quiz should contain at least one selected answer
-        // however it appeared, that in some rare cases a question field
-        // 'submitted' might be set to true, but no answers selected!
-        this.sanityCheck();
-      } catch (error) {
-        this.errorMessage = localizeError(error);
+      // check if currentQuestions is uploading, in case of uploading: do nothing
+      if (this.quiz.questions[this.currentQuestionIndex].uploading) {
+        return;
+      }
+      // check that there is no next question
+      if (this.currentQuestionIndex + 1 >= this.quiz.questions.length) {
+        // mark the current question as uploading
+        this.uploadQuestion(this.quiz.questions[this.currentQuestionIndex]);
+
+        // upload question with answer to API server
+        this.submitQuiz();
+      } else {
+        // just switch to the next question
+        this.increaseQuestionIndex();
       }
     },
     changeAnswer(id, value) {
@@ -253,6 +255,15 @@ export default {
       }
       return false;
     },
+    checkboxDisabled() {
+      return this.submitted || this.uploading;
+    },
+    uploading() {
+      if (this.quiz.questions[this.currentQuestionIndex]) {
+        return this.quiz.questions[this.currentQuestionIndex].uploading;
+      }
+      return false;
+    },
     questionAnswered() {
       const answered = this.quiz.questions.reduce((acc, question) => {
         if (question.answers.reduce((accul, answer) => accul || answer.correct, false)) {
@@ -267,7 +278,7 @@ export default {
       })(answered)}`;
     },
     duration() {
-      console.log('Evaluation=> DURATION: ', this.quiz.duration);
+      // console.log('Evaluation=> DURATION: ', this.quiz.duration);
 
       if (this.quiz) {
         return this.quiz.duration;
@@ -312,5 +323,9 @@ h4 {
 
 .separator {
   width: 0.5rem;
+}
+
+.placeholder {
+  color: white;
 }
 </style>

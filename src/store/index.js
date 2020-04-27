@@ -103,6 +103,7 @@ export default new Vuex.Store({
           return {
             ...question,
             submitted: true,
+            uploading: false,
           };
         }
         return question;
@@ -120,6 +121,30 @@ export default new Vuex.Store({
         return question;
       });
       localStorage.setItem('quiz', JSON.stringify(state.quiz));
+    },
+    [types.INCREASE_QUESTION_INDEX](state) {
+      state.currentQuestionIndex += 1;
+    },
+    [types.DECREASE_QUESTION_INDEX](state) {
+      state.currentQuestionIndex -= 1;
+      if (state.currentQuestionIndex < 0) {
+        state.currentQuestionIndex = 0;
+      }
+    },
+    [types.UPLOAD_QUESTION](state, payload) {
+      state.quiz.questions = state.quiz.questions.map((question) => {
+        if (question.id === payload.question.id && !question.submitted) {
+          return {
+            ...question,
+            uploading: true,
+          };
+        }
+        return question;
+      });
+      localStorage.setItem('quiz', JSON.stringify(state.quiz));
+    },
+    [types.MOVETO_LAST_QUESTION_INDEX](state) {
+      state.currentQuestionIndex = state.quiz.questions.length - 1;
     },
   },
   actions: {
@@ -155,6 +180,18 @@ export default new Vuex.Store({
     },
     setCountdownId(context, id) {
       context.commit(types.SET_COUNTDOWN_ID, { id });
+    },
+    increaseQuestionIndex(context) {
+      context.commit(types.INCREASE_QUESTION_INDEX);
+    },
+    decreaseQuestionIndex(context) {
+      context.commit(types.DECREASE_QUESTION_INDEX);
+    },
+    uploadQuestion(context, question) {
+      context.commit(types.UPLOAD_QUESTION, { question });
+    },
+    moveToLastQuestionIndex(context) {
+      context.commit(types.MOVETO_LAST_QUESTION_INDEX);
     },
   },
   getters: {
