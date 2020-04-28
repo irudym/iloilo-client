@@ -92,6 +92,7 @@ export default {
           this.loginUser(response);
           this.$router.push('/quizzes');
         } catch (error) {
+          console.log('Login error: ', error);
           this.errorMessage = localizeError(error);
         }
       }

@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import * as Cookies from 'js-cookie';
 import * as types from './types';
+import { loggerPlugin } from './logger';
 
 // configure cookies
 const COOKIE_EMAIL = 'iloilo-user-email';
@@ -146,6 +147,19 @@ export default new Vuex.Store({
     [types.MOVETO_LAST_QUESTION_INDEX](state) {
       state.currentQuestionIndex = state.quiz.questions.length - 1;
     },
+    [types.CLEAR_QUESTION_STATES](state, payload) {
+      state.quiz.questions = state.quiz.questions.map((question) => {
+        if (question.id === payload.question.id && !question.submitted) {
+          return {
+            ...question,
+            uploading: false,
+            submitted: false,
+          };
+        }
+        return question;
+      });
+      localStorage.setItem('quiz', JSON.stringify(state.quiz));
+    },
   },
   actions: {
     loginUser(context, user) {
@@ -193,6 +207,9 @@ export default new Vuex.Store({
     moveToLastQuestionIndex(context) {
       context.commit(types.MOVETO_LAST_QUESTION_INDEX);
     },
+    clearQuestionStates(context, question) {
+      context.commit(types.CLEAR_QUESTION_STATES, { question });
+    },
   },
   getters: {
     isLogged: (state) => {
@@ -213,4 +230,5 @@ export default new Vuex.Store({
   },
   modules: {
   },
+  plugins: [loggerPlugin],
 });

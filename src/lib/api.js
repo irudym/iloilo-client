@@ -204,3 +204,30 @@ export const evaluateQuestion = async ({
     throw constructError(error);
   }
 };
+
+/**
+ * Upload user vuex history to API server, use this function only for debug/development purposes!
+ * Should be deleted in production
+ * @param {string} url API server URL
+ * @param {string} log Vuex log object
+ * @param {string} token Security token to identify the current user
+ */
+export const uploadVuexLogger = async ({ url, log, token }) => {
+  try {
+    await axios.post(`${url}/vuexloggers`, {
+      data: {
+        type: 'vuexlogger',
+        attributes: {
+          log: JSON.stringify(log),
+        },
+      },
+    }, {
+      headers: {
+        Authorization: token,
+        'Content-Type': 'application/json',
+      },
+    });
+  } catch (error) {
+    console.log('VUEXlogger: Cannot upload vuex log!');
+  }
+};

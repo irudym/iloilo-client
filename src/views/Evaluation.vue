@@ -69,7 +69,7 @@ import OkButton from '../components/OkButton.vue';
 import LoadingButton from '../components/LoadingButton.vue';
 import RadialBar from '../components/RadialBar.vue';
 import { serverUrl } from '../config/globals';
-import { loadQuiz, evaluateQuestion } from '../lib/api';
+import { loadQuiz, evaluateQuestion, uploadVuexLogger } from '../lib/api';
 import { deSerializeQuiz, serializeQuiz, deSerializeQuestion } from '../lib/serializer';
 import { createCountFormatter } from '../lib/utils';
 import { localizeError } from '../lib/localize';
@@ -156,7 +156,8 @@ export default {
   methods: {
     ...mapActions(['loadQuiz', 'clearQuiz', 'setAnswerValue', 'setCurrentQuestionIndex',
       'submitQuestion', 'unsubmitQuestion', 'addQuestion', 'setCountdownId',
-      'increaseQuestionIndex', 'decreaseQuestionIndex', 'uploadQuestion', 'moveToLastQuestionIndex']),
+      'increaseQuestionIndex', 'decreaseQuestionIndex', 'uploadQuestion', 'moveToLastQuestionIndex',
+      'clearQuestionStates']),
     updateTime() {
       this.progress -= 1;
       if (this.progress < 0) this.progress = this.duration;
@@ -198,11 +199,19 @@ export default {
           // move to the last question
           this.moveToLastQuestionIndex();
         } else {
+          // submit logger to API server
+          await uploadVuexLogger({
+            url: serverUrl,
+            log: this.$vuexLogger,
+            token: this.getToken,
+          });
           this.clearQuiz();
           this.$router.push(`/result/${response.data.attributes.score}`);
         }
       } catch (error) {
         this.errorMessage = error;
+        this.moveToLastQuestionIndex();
+        this.clearQuestionStates(this.quiz.questions[this.currentQuestionIndex]);
       }
     },
     async forward() {
