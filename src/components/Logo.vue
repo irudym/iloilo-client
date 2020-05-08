@@ -31,5 +31,6 @@ export default {
 <style lang="scss" scoped>
 .logo {
   margin: 0 0.5rem;
+  height: 67px;
 }
 </style>

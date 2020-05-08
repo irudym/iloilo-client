@@ -247,14 +247,6 @@ export default {
     ...mapGetters(['getToken', 'getQuiz', 'currentQuestionIndex', 'countdownId',
       'isLogged', 'getTimeInterval', 'currentQuestion']),
     ...mapState(['quiz', 'currentQuestionIndex']),
-    /* currentQuestion() {
-      if (this.quiz.questions[this.currentQuestionIndex]) {
-        return this.quiz.questions.length > 0 ?
-        this.quiz.questions[this.currentQuestionIndex].text : '';
-      }
-      return '';
-    },
-    */
     answers() {
       if (this.quiz.questions[this.currentQuestionIndex]) {
         return this.quiz.questions.length > 0
