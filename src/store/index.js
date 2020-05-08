@@ -20,7 +20,7 @@ const initialState = {
     id: Cookies.get(COOKIE_USER_ID),
     user_name: Cookies.get(COOKIE_USER_NAME),
   },
-  quiz: localStorage.getItem('quiz') ? JSON.parse(localStorage.getItem('quiz')) : { questions: [] },
+  quiz: localStorage.getItem('quiz') ? JSON.parse(localStorage.getItem('quiz')) : { questions: [{}] },
   currentQuestionIndex: localStorage.getItem('current_question_index') ? JSON.parse(localStorage.getItem('current_question_index')) : 0,
   timeIntervalId: null,
   countdownId: null,
@@ -67,7 +67,7 @@ export default new Vuex.Store({
       localStorage.setItem('current_question_index', JSON.stringify(0));
     },
     [types.CLEAR_QUIZ](state) {
-      state.quiz = { questions: [] };
+      state.quiz = { questions: [{}] };
       localStorage.setItem('quiz', JSON.stringify(state.quiz));
       state.currentQuestionIndex = 0;
       localStorage.setItem('current_question_index', JSON.stringify(0));
@@ -227,6 +227,7 @@ export default new Vuex.Store({
     getQuiz: (state) => state.quiz,
     currentQuestionIndex: (state) => state.currentQuestionIndex,
     countdownId: (state) => state.countdownId,
+    currentQuestion: (state) => state.quiz.questions[state.currentQuestionIndex],
   },
   modules: {
   },

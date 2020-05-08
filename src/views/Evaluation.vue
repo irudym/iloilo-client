@@ -34,7 +34,7 @@
             ...
           </div>
           <div class="questions">
-            {{currentQuestion}}
+            {{currentQuestion.text}}
           </div>
           <div class="answers">
             <p v-for="answer in answers" :key="answer.text">
@@ -244,16 +244,18 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['getToken', 'getQuiz', 'currentQuestionIndex', 'countdownId', 'isLogged', 'getTimeInterval']),
+    ...mapGetters(['getToken', 'getQuiz', 'currentQuestionIndex', 'countdownId',
+      'isLogged', 'getTimeInterval', 'currentQuestion']),
     ...mapState(['quiz', 'currentQuestionIndex']),
-    currentQuestion() {
+    /* currentQuestion() {
       if (this.quiz.questions[this.currentQuestionIndex]) {
-        return this.quiz.questions.length > 0 ? this.quiz.questions[this.currentQuestionIndex].text : '';
+        return this.quiz.questions.length > 0 ?
+        this.quiz.questions[this.currentQuestionIndex].text : '';
       }
       return '';
     },
+    */
     answers() {
-      // eslint-disable-next-line max-len
       if (this.quiz.questions[this.currentQuestionIndex]) {
         return this.quiz.questions.length > 0
           ? this.quiz.questions[this.currentQuestionIndex].answers

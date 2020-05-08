@@ -143,7 +143,6 @@ export default {
       this.notificationMessage = null;
       if (!this.validate()) {
         this.errors = {};
-        console.log('Submit: ', this.email, '  pass: ', this.password1);
         try {
           const user = {
             data: {
@@ -162,8 +161,6 @@ export default {
             id: this.getUserId,
             user,
           });
-
-          console.log('[Profile]=> response: ', response);
 
           if (response.auth_token) {
             this.loginUser(response);
